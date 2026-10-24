@@ -28,6 +28,15 @@ const SIZES: Record<DeviceTier, { paper: number; card: number; seal: number; ani
   low: { paper: 768, card: 1024, seal: 256, aniso: 1 },
 }
 
+function loadImage(src: string) {
+  return new Promise<HTMLImageElement | null>((resolve) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = () => resolve(null)
+    img.src = src
+  })
+}
+
 function disposeAll(t: InvitationTextures) {
   ;[t.pocket, t.flap, t.liner, t.card].forEach(({ map, pbr }) => {
     map.dispose()
@@ -44,7 +53,7 @@ export function useInvitationTextures(dims: EnvelopeDims, cardAspect: number, ti
     let cancelled = false
     let created: InvitationTextures | null = null
 
-    loadCanvasFonts().then(() => {
+    Promise.all([loadCanvasFonts(), loadImage('/vines/6.svg'), loadImage('/logos/1.png')]).then(([, floral, logo]) => {
       if (cancelled) return
       const s = SIZES[tier]
       const date = parseDate(wedding.weddingDateTime)
@@ -65,8 +74,10 @@ export function useInvitationTextures(dims: EnvelopeDims, cardAspect: number, ti
             city: wedding.city,
           },
           s.aniso,
+          floral,
+          logo,
         ),
-        seal: sealTexture(s.seal, monogram),
+        seal: sealTexture(s.seal, monogram, logo),
       }
       setTextures(created)
     })

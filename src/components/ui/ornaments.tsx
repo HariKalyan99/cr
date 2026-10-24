@@ -5,49 +5,14 @@ type SvgProps = SVGProps<SVGSVGElement>
 const petal = (len: number, w: number) =>
   `M0 0 C${w} ${-len * 0.35} ${w} ${-len * 0.75} 0 ${-len} C${-w} ${-len * 0.75} ${-w} ${-len * 0.35} 0 0Z`
 
-function Ring({ count, r, len, w, offset = 0 }: { count: number; r: number; len: number; w: number; offset?: number }) {
-  const d = petal(len, w)
-  return (
-    <g>
-      {Array.from({ length: count }, (_, i) => (
-        <path key={i} d={d} transform={`rotate(${(i * 360) / count + offset}) translate(0 ${-r})`} />
-      ))}
-    </g>
-  )
+/** Intertwined C R mark from public/logos. */
+export function MonogramLogo({ className }: { className?: string }) {
+  return <img src="/logos/1.png" alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
 }
 
-function Dots({ count, r, size }: { count: number; r: number; size: number }) {
-  return (
-    <g fill="currentColor" stroke="none">
-      {Array.from({ length: count }, (_, i) => {
-        const a = (i / count) * Math.PI * 2
-        return <circle key={i} cx={Math.cos(a) * r} cy={Math.sin(a) * r} r={size} />
-      })}
-    </g>
-  )
-}
-
-/** Fine-line mandala, drawn procedurally so it scales crisply at any size. */
-export function Mandala(props: SvgProps) {
-  return (
-    <svg viewBox="-100 -100 200 200" fill="none" stroke="currentColor" strokeWidth={0.45} aria-hidden="true" {...props}>
-      <circle r={6} />
-      <circle r={13} />
-      <Ring count={8} r={13} len={17} w={6.5} />
-      <Ring count={8} r={13} len={11} w={4} offset={22.5} />
-      <circle r={34} />
-      <circle r={36.5} strokeDasharray="1 2" />
-      <Ring count={16} r={36.5} len={15} w={4.6} />
-      <Dots count={32} r={56} size={0.9} />
-      <circle r={60} />
-      <circle r={62.5} />
-      <Ring count={24} r={62.5} len={21} w={5.5} />
-      <Ring count={24} r={62.5} len={12} w={3} offset={7.5} />
-      <circle r={88} strokeDasharray="0.6 2.4" />
-      <Dots count={48} r={92} size={0.7} />
-      <circle r={96} />
-    </svg>
-  )
+/** One of the mandalas in public/mandals. The parent owns any rotation, scale, or scroll motion. */
+export function Mandala({ src, className }: { src: string; className?: string }) {
+  return <img src={src} alt="" draggable={false} className={`pointer-events-none aspect-square w-full object-cover object-center select-none ${className ?? ''}`} />
 }
 
 /** Gold rule with a central lotus bud. */
@@ -65,36 +30,9 @@ export function Divider({ className, ...props }: SvgProps) {
   )
 }
 
-/** Corner vine with leaves and a small jasmine flower; mirror with CSS transforms. */
-export function CornerFloral(props: SvgProps) {
-  const leaf = 'M0 0 C4 -6 12 -8 18 -6 C12 -2 6 2 0 0Z'
-  const leaves: [number, number, number][] = [
-    [26, 92, -70],
-    [18, 70, -20],
-    [40, 58, -95],
-    [36, 38, -40],
-    [62, 30, -110],
-    [70, 14, -60],
-    [96, 10, -150],
-  ]
-  return (
-    <svg viewBox="0 0 140 140" fill="none" stroke="currentColor" strokeWidth={0.8} aria-hidden="true" {...props}>
-      <path d="M6 136 C8 90 24 52 56 30 C78 15 104 8 136 6" />
-      <path d="M20 112 C30 100 34 88 30 76" strokeOpacity={0.6} />
-      <path d="M58 30 C66 40 80 44 92 40" strokeOpacity={0.6} />
-      {leaves.map(([x, y, r], i) => (
-        <path key={i} d={leaf} transform={`translate(${x} ${y}) rotate(${r})`} fill="currentColor" fillOpacity={0.12} />
-      ))}
-      <g transform="translate(22 24)">
-        {Array.from({ length: 5 }, (_, i) => (
-          <path key={i} d={petal(10, 4.5)} transform={`rotate(${i * 72})`} fill="currentColor" fillOpacity={0.1} />
-        ))}
-        <circle r={2} fill="currentColor" stroke="none" />
-      </g>
-      <circle cx={112} cy={22} r={1.4} fill="currentColor" stroke="none" />
-      <circle cx={44} cy={110} r={1.4} fill="currentColor" stroke="none" />
-    </svg>
-  )
+/** A corner vine from public/vines. Each file is drawn for one corner; mirror the box to the others. */
+export function CornerFloral({ src, className }: { src: string; className?: string }) {
+  return <img src={src} alt="" draggable={false} className={`pointer-events-none aspect-square object-contain select-none ${className ?? ''}`} />
 }
 
 /** objectBoundingBox clip-path for the Mughal-style arch used in the hero. Render once. */
@@ -193,7 +131,7 @@ function Lantern() {
   )
 }
 
-const motifs = { mehendi: Paisley, haldi: Marigold, wedding: Kalash, reception: Lantern }
+const motifs = { mehendi: Paisley, haldi: Marigold, sangeet: Lantern, wedding: Kalash, reception: Lantern }
 
 export function EventMotifIcon({ motif, ...props }: SvgProps & { motif: keyof typeof motifs }) {
   const Motif = motifs[motif]

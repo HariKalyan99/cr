@@ -4,6 +4,7 @@ import { wedding } from '../../data/wedding'
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
+import { Mandala } from '../ui/ornaments'
 import { SectionHeading } from '../ui/SectionHeading'
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
@@ -62,6 +63,11 @@ export function CoupleStory() {
     () => {
       const mm = gsap.matchMedia()
       mm.add(MOTION_OK, () => {
+        gsap.fromTo(
+          '[data-story-mandala]',
+          { rotate: -8 },
+          { rotate: 10, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
+        )
         gsap.utils.toArray<HTMLElement>('[data-parallax-img]', root.current).forEach((el) => {
           gsap.fromTo(
             el,
@@ -76,8 +82,11 @@ export function CoupleStory() {
 
   const { story } = wedding
   return (
-    <section id="story" ref={root} aria-labelledby="story-title" className="paper-grain relative bg-paper py-[clamp(5.5rem,13vw,11rem)]">
-      <div className="mx-auto max-w-7xl px-6 sm:px-10">
+    <section id="story" ref={root} aria-labelledby="story-title" className="paper-grain relative overflow-hidden bg-paper py-[clamp(5.5rem,13vw,11rem)]">
+      <div data-story-mandala aria-hidden="true" className="pointer-events-none absolute top-16 -right-[62vw] w-[68vw] opacity-[0.22] lg:top-8 lg:-right-[8vw] lg:w-[min(28rem,32vw)] lg:opacity-[0.28]">
+        <Mandala src="/mandals/3.svg" className="w-full" />
+      </div>
+      <div className="relative z-[1] mx-auto max-w-7xl px-6 sm:px-10">
         <SectionHeading id="story-title" eyebrow="Chapter by chapter" title={story.title} lede={story.intro} />
         <ol className="mt-20 space-y-24 sm:mt-28 lg:space-y-40">
           {story.chapters.map((chapter, i) => (

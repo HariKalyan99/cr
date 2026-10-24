@@ -90,12 +90,12 @@ export function RSVPForm() {
         />
 
         <div className="relative mx-auto mt-14 max-w-2xl sm:mt-20" data-reveal>
-          <div className="relative bg-ivory px-6 py-10 shadow-[0_40px_80px_-40px_rgba(61,18,32,0.45)] sm:px-14 sm:py-14">
+          <div className="relative bg-ivory px-5 pt-16 pb-10 shadow-[0_40px_80px_-40px_rgba(61,18,32,0.45)] sm:px-14 sm:py-14">
             <div aria-hidden="true" className="pointer-events-none absolute inset-2.5 border border-gold/45 sm:inset-4" />
-            <CornerFloral aria-hidden="true" className="pointer-events-none absolute -top-1 -left-1 size-20 text-gold/50 sm:size-24" />
-            <CornerFloral aria-hidden="true" className="pointer-events-none absolute -right-1 -bottom-1 size-20 -scale-100 text-gold/50 sm:size-24" />
+            <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-1 right-1 size-12 opacity-80 sm:size-16" />
+            <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1 size-12 -scale-100 opacity-80 sm:size-16" />
 
-            <h3 className="text-center font-script text-5xl text-gold-deep">Kindly reply</h3>
+            <h3 className="relative text-center font-script text-[2.7rem] leading-none text-gold-deep sm:text-5xl">Kindly reply</h3>
             <p className="mt-2 text-center text-sm text-ink-soft">
               {couple.partnerOne} &amp; {couple.partnerTwo}
             </p>
@@ -123,7 +123,7 @@ export function RSVPForm() {
                     clearError('name')
                     setName(e.target.value)
                   }}
-                  placeholder="As it should appear on the guest list"
+                  placeholder="Your full name"
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? `${formId}-name-error` : undefined}
                   className={field}

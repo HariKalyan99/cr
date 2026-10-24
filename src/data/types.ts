@@ -21,22 +21,27 @@ export interface StoryChapter {
   image: WeddingImage
 }
 
-export type EventMotif = 'mehendi' | 'haldi' | 'wedding' | 'reception'
+export type EventMotif = 'mehendi' | 'haldi' | 'sangeet' | 'wedding' | 'reception'
 
 export interface WeddingEvent {
   id: string
   name: string
   /** Short poetic line shown under the event name. */
   tagline: string
-  /** ISO 8601 with explicit offset, e.g. 2027-02-12T18:30:00+05:30 */
+  /** ISO 8601 with explicit offset, e.g. 2026-10-30T07:30:00+05:30 */
   start: string
-  end: string
+  /** Omit when the card does not give a finishing time. */
+  end?: string
+  /** Shown instead of a start–end range, e.g. "9:00 AM onwards IST". */
+  timeLabel?: string
   /** Name of the specific space, e.g. "Garden Lawn". */
   space: string
   venueName: string
   address: string
   /** Text used for Google Maps search / directions. Prefer the venue's exact listed name. */
   mapsQuery: string
+  /** Exact Maps pin from the family, when one was shared. */
+  mapsUrl?: string
   dressCode?: { label: string; swatches: string[] }
   description: string
   motif: EventMotif
@@ -50,6 +55,20 @@ export interface TravelInfo {
   title: string
   detail: string
   note?: string
+}
+
+export interface VenuePlace {
+  id: string
+  /** Which celebrations happen here. */
+  when: string
+  name: string
+  address: string
+  mapsQuery: string
+  mapsUrl?: string
+  description: string
+  /** Phone numbers printed for guests, separate from the RSVP WhatsApp. */
+  queries?: string
+  travel: TravelInfo[]
 }
 
 export interface WeddingConfig {
@@ -92,13 +111,7 @@ export interface WeddingConfig {
     images: WeddingImage[]
   }
   events: WeddingEvent[]
-  venue: {
-    name: string
-    address: string
-    mapsQuery: string
-    description: string
-    travel: TravelInfo[]
-  }
+  venues: VenuePlace[]
   rsvp: {
     /** ISO date (yyyy-mm-dd) shown as "Kindly respond by". Leave empty to hide. */
     respondBy: string

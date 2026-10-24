@@ -5,7 +5,7 @@ import { formatDotted, formatLongDate, formatWeekday, parseDate } from '../../li
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { easeOut } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
-import { ArchOutline, Mandala } from '../ui/ornaments'
+import { ArchOutline, Mandala, MonogramLogo } from '../ui/ornaments'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { SampleNote } from '../ui/SampleNote'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
@@ -26,7 +26,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
   const reduced = useReducedMotionPref()
   const { scrollTo } = useSmoothScroll()
   const date = parseDate(wedding.weddingDateTime)
-  const { partnerOne, partnerTwo, monogram } = wedding.couple
+  const { partnerOne, partnerTwo } = wedding.couple
 
   useGSAP(
     () => {
@@ -36,7 +36,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
         gsap.to('[data-parallax="image"]', { yPercent: 10, ease: 'none', scrollTrigger })
         gsap.to('[data-parallax="frame"]', { yPercent: -7, ease: 'none', scrollTrigger })
         gsap.to('[data-parallax="text"]', { yPercent: -14, autoAlpha: 0.25, ease: 'none', scrollTrigger })
-        gsap.to('[data-parallax="mandala"]', { rotate: 50, ease: 'none', scrollTrigger })
+        gsap.to('[data-parallax="mandala"]', { rotate: 18, ease: 'none', scrollTrigger })
         gsap.to('[data-parallax="badge"]', { rotate: 120, ease: 'none', scrollTrigger })
       })
     },
@@ -61,13 +61,12 @@ export function WeddingHero({ revealed, headingRef }: Props) {
       id="top"
       ref={root}
       aria-labelledby="hero-title"
-      className="paper-grain relative overflow-hidden bg-ivory pt-28 pb-20 sm:pt-32 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-28 lg:pb-24"
+      className="paper-grain relative overflow-hidden bg-ivory pt-[max(env(safe-area-inset-top),4.5rem)] pb-20 sm:pt-20 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-16 lg:pb-24"
     >
-      <div data-parallax="mandala" aria-hidden="true" className="pointer-events-none absolute -top-[24vw] -right-[38vw] w-[95vw] text-gold/[0.13] lg:-top-[14vw] lg:-right-[16vw] lg:w-[58vw]">
-        <Mandala className="w-full" />
+      <div data-parallax="mandala" aria-hidden="true" className="pointer-events-none absolute -top-[22vw] -right-[34vw] w-[86vw] opacity-40 lg:-top-[14vw] lg:-right-[16vw] lg:w-[58vw] lg:opacity-55">
+        <Mandala src="/mandals/3.svg" className="w-full" />
       </div>
-
-      <div className="relative mx-auto grid w-full max-w-7xl gap-14 px-6 sm:px-10 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="relative z-[1] mx-auto grid w-full max-w-7xl gap-14 px-6 sm:px-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div data-parallax="text" className="lg:col-span-7">
           <motion.div variants={container} initial="hidden" animate={state}>
             <motion.p variants={item} className="eyebrow">
@@ -89,7 +88,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
             <motion.p variants={item} className="lede mt-8 max-w-[34rem] text-pretty">
               {wedding.hero.announcement}
             </motion.p>
-            <motion.div variants={item} className="mt-10 flex flex-col gap-2 text-[0.78rem] font-medium tracking-[0.26em] text-ink uppercase sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3">
+            <motion.div variants={item} className="mt-10 flex flex-col gap-2 text-[0.72rem] font-medium tracking-[0.14em] text-ink uppercase sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-3 sm:text-[0.78rem] sm:tracking-[0.26em]">
               <span>{date ? `${formatWeekday(date)} · ${formatLongDate(date)}` : 'Date to be announced'}</span>
               <span aria-hidden="true" className="hidden h-px w-10 bg-gold sm:block" />
               <span>{wedding.city}</span>
@@ -130,6 +129,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
               animate={revealed ? { opacity: 1, scale: 1 } : undefined}
               transition={{ duration: 1.2, ease: easeOut, delay: 0.9 }}
             >
+              <img src="/vines/3.svg" alt="" draggable={false} className="pointer-events-none absolute top-1/2 left-1/2 w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none" />
               <div className="absolute inset-0 rounded-full bg-burgundy shadow-[0_18px_40px_-14px_rgba(61,18,32,0.7)]" />
               <svg data-parallax="badge" viewBox="0 0 100 100" className="absolute inset-0 size-full text-gold-soft">
                 <defs>
@@ -139,11 +139,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
                   <textPath href="#badge-ring">SAVE THE DATE · {date ? formatDotted(date) : 'TBA'} ·</textPath>
                 </text>
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center font-display text-2xl text-ivory italic">
-                {monogram[0]}
-                <span className="mx-0.5 text-lg text-gold-soft">&amp;</span>
-                {monogram[1]}
-              </div>
+              <MonogramLogo className="absolute top-1/2 left-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2" />
             </motion.div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { WeddingCountdown } from './components/countdown/WeddingCountdown'
 import { WeddingEvents } from './components/events/WeddingEvents'
 import { WeddingGallery } from './components/gallery/WeddingGallery'
 import { WeddingHero } from './components/hero/WeddingHero'
+import { WeddingMusic } from './components/audio/WeddingMusic'
 import { InvitationIntro } from './components/invitation/InvitationIntro'
 import { SiteNav } from './components/layout/SiteNav'
 import { SmoothScroll } from './components/providers/SmoothScroll'
@@ -74,8 +75,10 @@ function Experience() {
 
 export default function App() {
   return (
-    <SmoothScroll>
-      <Experience />
-    </SmoothScroll>
+    <WeddingMusic>
+      <SmoothScroll>
+        <Experience />
+      </SmoothScroll>
+    </WeddingMusic>
   )
 }

@@ -33,7 +33,7 @@
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 1.25rem;
   }
 
   body {
@@ -74,11 +74,18 @@
 @layer components {
   .eyebrow {
     font-family: var(--font-sans);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 500;
-    letter-spacing: 0.32em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--color-gold-deep);
+  }
+
+  @media (min-width: 40rem) {
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+    }
   }
 
   .on-dark .eyebrow {
@@ -117,12 +124,12 @@
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    min-height: 2.9rem;
-    padding: 0.7rem 1.5rem;
+    min-height: 2.75rem;
+    padding: 0.7rem 1.15rem;
     font-family: var(--font-sans);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     border-radius: 999px;
     transition:
@@ -132,6 +139,14 @@
       transform 0.35s ease;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+  }
+
+  @media (min-width: 40rem) {
+    .btn {
+      padding: 0.7rem 1.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+    }
   }
 
   .btn:active {
@@ -254,6 +269,123 @@
   }
   100% {
     transform: translateY(220%);
+  }
+}
+
+/* Clears the middle of a centred mandala so headings and numbers stay readable. */
+.mandala-ring {
+  -webkit-mask-image: radial-gradient(circle, transparent 0 28%, #000 50%, transparent 76%);
+  mask-image: radial-gradient(circle, transparent 0 28%, #000 50%, transparent 76%);
+}
+
+/* A wider clear centre so the invitation sits inside the ring on every screen. */
+.mandala-invite {
+  -webkit-mask-image: radial-gradient(circle, transparent 0 56%, #000 68%, #000 88%, transparent 100%);
+  mask-image: radial-gradient(circle, transparent 0 56%, #000 68%, #000 88%, transparent 100%);
+}
+
+@media (min-width: 48rem) {
+  .mandala-invite {
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, transparent 20%, #000 36%),
+      radial-gradient(circle, transparent 0 52%, #000 64%, #000 90%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, transparent 20%, #000 36%),
+      radial-gradient(circle, transparent 0 52%, #000 64%, #000 90%, transparent 100%);
+    mask-composite: intersect;
+  }
+}
+
+@property --dx {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --dy {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+.seal-letter-mist {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% -50%;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(255, 226, 150, 0.85) 0%, rgba(232, 190, 96, 0.35) 42%, transparent 72%);
+  filter: blur(1.5px);
+  mix-blend-mode: screen;
+  animation: seal-mist 1.15s ease-out both;
+}
+
+.seal-dust {
+  position: absolute;
+  left: var(--ox, 0px);
+  top: var(--oy, 0px);
+  display: block;
+  width: var(--s, 2px);
+  height: var(--s, 2px);
+  margin: calc(var(--s, 2px) / -2) 0 0 calc(var(--s, 2px) / -2);
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff8dc 0%, #f0d078 40%, rgba(201, 154, 58, 0) 72%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: seal-dust 1.35s ease-out both;
+}
+
+.seal-dust.is-spark {
+  border-radius: 0.5px;
+  rotate: 45deg;
+  background: #ffe9ae;
+  box-shadow: 0 0 6px 1px rgba(255, 210, 110, 0.95);
+}
+
+.seal-shimmer.is-reduced .seal-dust,
+.seal-shimmer.is-reduced .seal-letter-mist {
+  animation-duration: 0.4s;
+}
+
+@keyframes seal-mist {
+  0% {
+    opacity: 0;
+    scale: 0.4;
+  }
+  18% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.35;
+  }
+}
+
+@keyframes seal-dust {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+    scale: 0.2;
+  }
+  10% {
+    opacity: 1;
+    scale: 1;
+  }
+  32% {
+    opacity: 0.2;
+  }
+  48% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    translate: var(--dx) var(--dy);
+    scale: 0.12;
   }
 }
 

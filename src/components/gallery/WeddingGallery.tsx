@@ -2,8 +2,9 @@ import { AnimatePresence } from 'framer-motion'
 import { Expand } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { wedding } from '../../data/wedding'
-import { gsap, useGSAP } from '../../lib/gsap'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
+import { Mandala } from '../ui/ornaments'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { SectionHeading } from '../ui/SectionHeading'
 import { Lightbox } from './Lightbox'
@@ -30,6 +31,17 @@ export function WeddingGallery() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
+      mm.add(MOTION_OK, () => {
+        gsap.fromTo(
+          '[data-gallery-mandala]',
+          { rotate: -18 },
+          {
+            rotate: 24,
+            ease: 'none',
+            scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
+          },
+        )
+      })
       mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
         gsap.utils.toArray<HTMLElement>('[data-speed]', root.current).forEach((el) => {
           const speed = Number(el.dataset.speed)
@@ -48,7 +60,13 @@ export function WeddingGallery() {
   return (
     <section id="gallery" ref={root} aria-labelledby="gallery-title" className="on-dark relative overflow-hidden bg-night py-[clamp(5.5rem,13vw,11rem)] text-ivory">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(122,36,58,0.45),transparent_70%)]" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-10">
+      {/* Lower half of the mandala, centred on the top edge so it arches over the heading. */}
+      <div aria-hidden="true" className="pointer-events-none absolute top-0 left-1/2 w-[min(128vw,34rem)] -translate-x-1/2 -translate-y-1/2 sm:w-[min(108vw,44rem)] lg:w-[min(88vw,54rem)]">
+        <div data-gallery-mandala className="opacity-50">
+          <Mandala src="/mandals/3.svg" className="w-full" />
+        </div>
+      </div>
+      <div className="relative z-[1] mx-auto max-w-7xl px-4 sm:px-10">
         <SectionHeading id="gallery-title" eyebrow="The gallery" title={gallery.title} lede={gallery.intro} />
 
         <ul className="mt-16 grid grid-cols-2 gap-3 sm:mt-24 sm:gap-5 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-10">
