@@ -5,7 +5,7 @@ import { formatDotted, parseDate } from '../../lib/dates'
 import { EASE_OUT, MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
-import { CornerFloral, Divider } from '../ui/ornaments'
+import { Divider, Mandala } from '../ui/ornaments'
 import { WaxSeal } from '../ui/WaxSeal'
 
 /**
@@ -53,8 +53,17 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
         const tl = gsap.timeline({
           scrollTrigger: { trigger: '[data-close-stage]', start: 'top 80%', end: 'center 45%', scrub: 0.8 },
         })
-        tl.fromTo('[data-close-flap]', { rotateX: 180 }, { rotateX: 0, ease: 'power2.inOut', duration: 1 })
-          .fromTo('[data-close-seal]', { scale: 1.9, autoAlpha: 0, rotate: -12 }, { scale: 1, autoAlpha: 1, rotate: 0, ease: EASE_OUT, duration: 0.5 }, 0.8)
+        tl.fromTo('[data-close-flap]', { rotateX: 180 }, { rotateX: 0, ease: 'power2.inOut', duration: 1 }).fromTo(
+          '[data-close-seal]',
+          { scale: 1.9, autoAlpha: 0, rotate: -12 },
+          { scale: 1, autoAlpha: 1, rotate: 0, ease: EASE_OUT, duration: 0.5 },
+          0.8,
+        )
+        gsap.fromTo(
+          '[data-close-mandala]',
+          { rotate: -10 },
+          { rotate: 10, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
+        )
       })
       // Without motion, simply show the envelope sealed.
       mm.add('(prefers-reduced-motion: reduce)', () => {
@@ -67,10 +76,10 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
   return (
     <section id="closing" ref={root} aria-labelledby="closing-title" className="on-dark relative overflow-hidden bg-night pt-[clamp(5.5rem,13vw,10rem)] text-ivory">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_30%,rgba(110,32,52,0.55),transparent_75%)]" />
-      <CornerFloral aria-hidden="true" className="pointer-events-none absolute top-6 left-4 size-28 text-gold-soft/30 sm:size-40" />
-      <CornerFloral aria-hidden="true" className="pointer-events-none absolute top-6 right-4 size-28 -scale-x-100 text-gold-soft/30 sm:size-40" />
-
-      <div className="relative mx-auto max-w-3xl px-6 text-center">
+      <div data-close-mandala aria-hidden="true" className="mandala-ring pointer-events-none absolute top-[46%] left-1/2 w-[min(80vw,30rem)] -translate-x-1/2 -translate-y-1/2 opacity-25">
+        <Mandala src="/mandals/3.svg" className="w-full" />
+      </div>
+      <div className="relative z-[1] mx-auto max-w-3xl px-6 text-center">
         <div data-close-stage>
           <ClosingEnvelope />
         </div>
@@ -86,13 +95,13 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
           {wedding.closing.message}
         </p>
 
-        <p className="mt-12 text-[0.72rem] tracking-[0.35em] text-ivory/60 uppercase" data-reveal>
+        <p className="mt-12 text-[0.68rem] tracking-[0.18em] text-ivory/60 uppercase sm:text-[0.72rem] sm:tracking-[0.35em]" data-reveal>
           {wedding.closing.signOff}
         </p>
         <p className="mt-3 font-script text-[clamp(3rem,10vw,5.5rem)] leading-tight text-gold-soft" data-reveal data-reveal-delay="0.08">
           {partnerOne} <span className="font-display text-[0.7em] font-light italic">&amp;</span> {partnerTwo}
         </p>
-        <p className="mt-4 text-[0.8rem] tracking-[0.4em] text-ivory/75 uppercase" data-reveal data-reveal-delay="0.12">
+        <p className="mt-4 text-[0.72rem] tracking-[0.18em] text-ivory/75 uppercase sm:text-[0.8rem] sm:tracking-[0.4em]" data-reveal data-reveal-delay="0.12">
           {date ? formatDotted(date) : ''} {date && '·'} {wedding.city}
         </p>
         {hashtag && (
@@ -101,8 +110,8 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
           </p>
         )}
 
-        <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row" data-reveal data-reveal-delay="0.2">
-          <button type="button" onClick={onReplay} className="btn btn-outline">
+        <div className="mt-12 flex w-full flex-col items-center justify-center gap-3 sm:flex-row" data-reveal data-reveal-delay="0.2">
+          <button type="button" onClick={onReplay} className="btn btn-outline w-full max-w-xs sm:w-auto">
             <RotateCcw className="size-4" aria-hidden="true" />
             Open the invitation again
           </button>
@@ -112,7 +121,7 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
               e.preventDefault()
               scrollTo('#top')
             }}
-            className="btn text-ivory/75 hover:text-ivory"
+            className="btn w-full max-w-xs text-ivory/75 hover:text-ivory sm:w-auto"
           >
             <ArrowUp className="size-4" aria-hidden="true" />
             Back to top

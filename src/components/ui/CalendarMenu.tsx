@@ -33,7 +33,7 @@ export function CalendarMenu({ entry, label = 'Add to calendar', className = 'bt
   if (!google) return null
 
   return (
-    <div ref={wrapper} className="relative inline-block">
+    <div ref={wrapper} className="relative w-full sm:w-auto">
       <button type="button" className={className} aria-expanded={open} aria-controls={menuId} onClick={() => setOpen((v) => !v)}>
         <CalendarPlus className="size-4" aria-hidden="true" />
         {label}

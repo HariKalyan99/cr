@@ -355,7 +355,7 @@ export interface CardContent {
   city: string
 }
 
-export function cardTexture(size: number, aspect: number, content: CardContent, aniso: number) {
+export function cardTexture(size: number, aspect: number, content: CardContent, aniso: number, floral: CanvasImageSource | null = null) {
   const w = size
   const h = Math.round(size / aspect)
   const L = layered(w, h, '#fbf6ec')
@@ -373,24 +373,25 @@ export function cardTexture(size: number, aspect: number, content: CardContent, 
     const i = w * 0.042
     ctx.strokeRect(i, i, w - i * 2, h - i * 2)
   }, 0.9)
-  foil(L, (ctx) => {
-    const i = w * 0.042
-    const r = w * 0.016
-    ctx.lineWidth = w * 0.0011
-    for (const [x, y] of [
-      [i, i],
-      [w - i, i],
-      [i, h - i],
-      [w - i, h - i],
-    ]) {
-      ctx.beginPath()
-      ctx.arc(x, y, r, 0, Math.PI * 2)
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.arc(x, y, r * 0.35, 0, Math.PI * 2)
-      ctx.fill()
+  if (floral) {
+    const S = w * 0.13
+    const m = w * 0.03
+    const ctx = L.color
+    ctx.save()
+    ctx.globalAlpha = 0.9
+    // Vine 6 is drawn in the top-right of its square, so the image is anchored by that corner.
+    for (const [x, y, sx, sy] of [
+      [w - m, m, 1, 1],
+      [m, h - m, -1, -1],
+    ] as const) {
+      ctx.save()
+      ctx.translate(x, y)
+      ctx.scale(sx, sy)
+      ctx.drawImage(floral, -S, 0, S, S)
+      ctx.restore()
     }
-  })
+    ctx.restore()
+  }
 
   // Monogram roundel.
   const my = h * 0.17
@@ -557,12 +558,15 @@ export function sealTexture(size: number, monogram: [string, string]) {
     if (i === 0) ctx.moveTo(x, y)
     else ctx.lineTo(x, y)
   })
-  ctx.strokeStyle = 'rgba(12, 3, 6, 0.92)'
-  ctx.lineWidth = u(2.6)
-  ctx.stroke()
-  ctx.strokeStyle = 'rgba(255, 220, 190, 0.55)'
+  ctx.strokeStyle = 'rgba(42, 14, 20, 0.38)'
   ctx.lineWidth = u(0.7)
   ctx.stroke()
+  ctx.save()
+  ctx.translate(u(0.28), 0)
+  ctx.strokeStyle = 'rgba(255, 236, 214, 0.28)'
+  ctx.lineWidth = u(0.22)
+  ctx.stroke()
+  ctx.restore()
 
   const map = new THREE.CanvasTexture(canvas)
   map.colorSpace = THREE.SRGBColorSpace

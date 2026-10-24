@@ -7,9 +7,11 @@ import { getDeviceTier, hasWebGL } from '../../lib/device'
 import { easeInOut, transition } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
+import { useWeddingMusic } from '../audio/WeddingMusic'
 import { SceneErrorBoundary } from '../three/SceneErrorBoundary'
 import { CornerFloral, Mandala } from '../ui/ornaments'
 import { CssEnvelope } from './CssEnvelope'
+import { SealGoldShimmer } from './SealShimmer'
 import type { IntroPhase } from './types'
 
 const InvitationScene = lazy(() => import('../three/InvitationScene'))
@@ -19,6 +21,7 @@ const CARD_HOLD_MS = 1300
 
 export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
   const reduced = useReducedMotionPref()
+  const { start } = useWeddingMusic()
   const { lock, unlock } = useSmoothScroll()
   const [phase, setPhase] = useState<IntroPhase>('idle')
   const [tier] = useState(getDeviceTier)
@@ -46,9 +49,11 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
 
   const open = useCallback(() => {
     if (phase !== 'idle') return
+    // Same turn as the seal tap, so the browser allows the music to start at once.
+    start()
     setRenderer(show3D ? '3d' : 'css')
     setPhase('opening')
-  }, [phase, show3D])
+  }, [phase, show3D, start])
 
   const handleRevealed = useCallback(() => setPhase('card'), [])
 
@@ -87,22 +92,16 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_38%_at_50%_42%,rgba(255,214,160,0.16),transparent_70%)]" />
         <motion.div
-          className="absolute left-1/2 top-1/2 w-[150vmin] -translate-x-1/2 -translate-y-1/2 text-gold-soft/[0.09]"
-          animate={{ rotate: idle ? 0 : 25, scale: idle ? 1 : 1.12 }}
+          className="mandala-invite absolute top-[52%] left-1/2 w-[min(132vw,96vh,52rem)] -translate-x-1/2 -translate-y-1/2 opacity-60 short:top-[54%] short:w-[min(108vw,84vh)]"
+          animate={{ rotate: idle ? 0 : 16 }}
           transition={{ duration: 4, ease: easeInOut }}
         >
-          <Mandala className="w-full" />
+          <Mandala src="/mandals/3.svg" className="w-full" />
         </motion.div>
         <div className="absolute inset-3 border border-gold-soft/25 sm:inset-5" />
         <div className="absolute inset-[18px] border border-gold-soft/10 sm:inset-[26px]" />
-        {[
-          'left-2 top-2',
-          'right-2 top-2 -scale-x-100',
-          'bottom-2 left-2 -scale-y-100',
-          'bottom-2 right-2 -scale-100',
-        ].map((pos) => (
-          <CornerFloral key={pos} className={`absolute size-24 text-gold-soft/45 sm:size-36 ${pos}`} />
-        ))}
+        <CornerFloral src="/vines/6.svg" className="absolute top-3 left-3 z-[1] size-16 -scale-x-100 opacity-80 sm:size-24" />
+        <CornerFloral src="/vines/6.svg" className="absolute right-3 bottom-3 z-[1] size-16 -scale-y-100 opacity-80 sm:size-24" />
       </div>
 
       {/* 3D invitation */}
@@ -137,6 +136,8 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
         )}
       </AnimatePresence>
 
+      <SealGoldShimmer active={phase !== 'idle'} reduced={reduced} />
+
       {/* Large tap target over the envelope (the visible button below is the accessible control) */}
       {idle && (
         <button
@@ -157,7 +158,7 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
       >
         <div className="mt-[clamp(3.5rem,11vh,7rem)] short:mt-7">
           <p className="eyebrow short:hidden">The wedding celebration of</p>
-          <p className="display mt-3 text-[clamp(2.4rem,8.5vw,4.6rem)] text-gold-soft short:mt-0 short:text-[2.2rem]">
+          <p className="display mt-3 text-[clamp(2.4rem,8.5vw,4.6rem)] text-gold-soft drop-shadow-[0_2px_18px_rgba(20,6,11,0.72)] short:mt-0 short:text-[2.2rem]">
             {partnerOne} <span className="mx-[0.05em] italic text-gold">&amp;</span> {partnerTwo}
           </p>
           {date && (

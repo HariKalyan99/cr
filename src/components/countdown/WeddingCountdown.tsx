@@ -15,8 +15,8 @@ function Unit({ value, label }: { value: number | null; label: string }) {
   const reduced = useReducedMotionPref()
   const text = value === null ? '--' : String(value).padStart(2, '0')
   return (
-    <div className="flex flex-col items-center px-2 sm:px-6">
-      <span className="relative block h-[1em] overflow-hidden font-display text-[clamp(3.2rem,12vw,7.5rem)] leading-none text-ivory tabular">
+    <div className="flex min-w-0 flex-col items-center px-1 sm:px-4 md:px-6">
+      <span className="relative block h-[1em] overflow-hidden font-display text-[clamp(2.15rem,10.5vw,7.5rem)] leading-none text-ivory tabular">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
             key={text}
@@ -30,7 +30,7 @@ function Unit({ value, label }: { value: number | null; label: string }) {
           </motion.span>
         </AnimatePresence>
       </span>
-      <span className="mt-3 text-[0.65rem] tracking-[0.35em] text-gold-soft uppercase sm:text-[0.72rem]">{label}</span>
+      <span className="mt-2 text-[0.58rem] tracking-[0.14em] text-gold-soft uppercase sm:mt-3 sm:text-[0.72rem] sm:tracking-[0.28em]">{label}</span>
     </div>
   )
 }
@@ -49,8 +49,8 @@ export function WeddingCountdown() {
       mm.add(MOTION_OK, () => {
         gsap.fromTo(
           '[data-mandala]',
-          { rotate: -30, scale: 0.9 },
-          { rotate: 30, scale: 1.05, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
+          { rotate: -12 },
+          { rotate: 12, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
         )
       })
     },
@@ -63,11 +63,10 @@ export function WeddingCountdown() {
   return (
     <section id="countdown" ref={root} aria-labelledby="countdown-title" className="on-dark relative overflow-hidden bg-wine py-[clamp(5.5rem,12vw,10rem)] text-ivory">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(140,40,64,0.55),transparent_75%)]" />
-      <div data-mandala aria-hidden="true" className="pointer-events-none absolute top-1/2 left-1/2 w-[min(150vw,64rem)] -translate-x-1/2 -translate-y-1/2 text-gold-soft/[0.12]">
-        <Mandala className="w-full" />
+      <div data-mandala aria-hidden="true" className="mandala-ring pointer-events-none absolute top-1/2 left-1/2 w-[min(78vw,28rem)] -translate-x-1/2 -translate-y-1/2 opacity-30">
+        <Mandala src="/mandals/3.svg" className="w-full" />
       </div>
-
-      <div className="relative mx-auto max-w-5xl px-5 text-center">
+      <div className="relative z-[1] mx-auto max-w-5xl px-5 text-center">
         <p className="eyebrow" data-reveal>
           Counting down to
         </p>
@@ -78,7 +77,7 @@ export function WeddingCountdown() {
 
         <div className="mt-14" data-reveal data-reveal-delay="0.2">
           {counting && (
-            <div role="timer" aria-labelledby="countdown-title" className="flex items-start justify-center divide-x divide-gold-soft/20">
+            <div role="timer" aria-labelledby="countdown-title" className="mx-auto flex w-full max-w-3xl items-start justify-center divide-x divide-gold-soft/20">
               <Unit value={v?.days ?? null} label={v?.days === 1 ? 'Day' : 'Days'} />
               <Unit value={v?.hours ?? null} label="Hours" />
               <Unit value={v?.minutes ?? null} label="Minutes" />
@@ -101,8 +100,9 @@ export function WeddingCountdown() {
 
         {date && (
           <div className="mt-14 flex flex-col items-center gap-6" data-reveal data-reveal-delay="0.25">
-            <p className="text-center text-[0.78rem] tracking-[0.3em] text-ivory/80 uppercase">
-              {formatWeekday(date)} · {formatLongDate(date)} · <span className="whitespace-nowrap">{formatTime(date)} {wedding.timeZoneLabel}</span>
+            <p className="text-center text-[0.68rem] leading-relaxed tracking-[0.16em] text-ivory/80 uppercase sm:text-[0.78rem] sm:tracking-[0.28em]">
+              <span className="block sm:inline">{formatWeekday(date)} · {formatLongDate(date)}</span>
+              <span className="mt-1 block sm:mt-0 sm:ml-2 sm:inline">{formatTime(date)} {wedding.timeZoneLabel}</span>
             </p>
             {counting && mainEvent && (
               <CalendarMenu

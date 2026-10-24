@@ -5,7 +5,6 @@ import * as THREE from 'three'
 import type { DeviceTier } from '../../lib/device'
 import type { IntroPhase } from '../invitation/types'
 import { Envelope3D } from './Envelope3D'
-import { Petals } from './Petals'
 
 export interface InvitationSceneProps {
   phase: IntroPhase
@@ -15,10 +14,10 @@ export interface InvitationSceneProps {
   onContextLost: () => void
 }
 
-const QUALITY: Record<DeviceTier, { dpr: [number, number]; petals: number; sparkles: number; shadowMap: number }> = {
-  high: { dpr: [1, 2], petals: 46, sparkles: 60, shadowMap: 1024 },
-  mobile: { dpr: [1, 1.75], petals: 22, sparkles: 26, shadowMap: 512 },
-  low: { dpr: [1, 1], petals: 10, sparkles: 0, shadowMap: 0 },
+const QUALITY: Record<DeviceTier, { dpr: [number, number]; sparkles: number; shadowMap: number }> = {
+  high: { dpr: [1, 2], sparkles: 60, shadowMap: 1024 },
+  mobile: { dpr: [1, 1.75], sparkles: 26, shadowMap: 512 },
+  low: { dpr: [1, 1], sparkles: 0, shadowMap: 0 },
 }
 
 /**
@@ -88,7 +87,6 @@ export default function InvitationScene({ phase, tier, onReady, onRevealed, onCo
         </mesh>
       )}
 
-      <Petals count={q.petals} />
       {q.sparkles > 0 && <Sparkles count={q.sparkles} scale={[10, 6, 3]} size={2.2} speed={0.25} opacity={0.75} color="#e9c87e" noise={0.6} />}
     </Canvas>
   )

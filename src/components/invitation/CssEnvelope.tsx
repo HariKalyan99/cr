@@ -12,7 +12,7 @@ const PAPER = 'linear-gradient(170deg, #f5ecdb 0%, #eadcc2 100%)'
 const FLAP_PAPER = 'linear-gradient(180deg, #f6eedf 0%, #ebdec6 100%)'
 
 /** Zig-zag crack shared with the 3D seal, expressed as CSS polygons for each half. */
-const CRACK_X = ['50%', '53%', '48%', '54%', '49%', '53%', '48%', '51%', '50%']
+const CRACK_X = ['50%', '50.8%', '49.5%', '50.9%', '49.7%', '50.6%', '49.6%', '50.3%', '50%']
 const crackPoints = CRACK_X.map((x, i) => `${x} ${100 - (i * 100) / (CRACK_X.length - 1)}%`)
 const SEAL_LEFT = `polygon(0 0, ${[...crackPoints].reverse().join(', ')}, 0 100%)`
 const SEAL_RIGHT = `polygon(100% 0, ${[...crackPoints].reverse().join(', ')}, 100% 100%)`
@@ -151,7 +151,7 @@ export function CssEnvelope({ phase, onRevealed, reduced }: Props) {
           <WaxSeal className="size-full" />
         </div>
         <svg data-crack viewBox="-60 -60 120 120" className="pointer-events-none absolute inset-0 size-full" aria-hidden="true">
-          <polyline points={CRACK_LINE} fill="none" stroke="#14060a" strokeOpacity={0.92} strokeWidth={2.4} strokeLinejoin="round" strokeLinecap="butt" />
+          <polyline points={CRACK_LINE} fill="none" stroke="#3a1218" strokeOpacity={0.4} strokeWidth={0.65} strokeLinejoin="round" strokeLinecap="butt" />
         </svg>
       </div>
     </div>

@@ -24,5 +24,5 @@ export function waxPath(radius = 1, cx = 0, cy = 0) {
   )
 }
 
-/** Zig-zag x-offsets (as a fraction of the radius) along the crack, from bottom to top. */
-export const CRACK = [0, 0.05, -0.04, 0.06, -0.02, 0.045, -0.035, 0.02, 0]
+/** Gentle x-offsets (as a fraction of the radius) along the hairline crack, from bottom to top. */
+export const CRACK = [0, 0.016, -0.01, 0.018, -0.006, 0.012, -0.008, 0.005, 0]

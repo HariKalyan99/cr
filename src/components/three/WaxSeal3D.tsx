@@ -53,7 +53,7 @@ export function SealHalf({ radius, monogram, side, ref }: SealHalfProps) {
       depth: DEPTH,
       bevelEnabled: true,
       bevelThickness: BEVEL,
-      bevelSize: radius * 0.018,
+      bevelSize: radius * 0.006,
       bevelSegments: 2,
       curveSegments: 4,
     })

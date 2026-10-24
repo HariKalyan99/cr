@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
+import { SoundToggle } from '../audio/WeddingMusic'
 import { wedding } from '../../data/wedding'
 import { easeOut, transition } from '../../lib/motion'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
@@ -74,20 +75,26 @@ export function SiteNav({ visible }: { visible: boolean }) {
           <ul className="hidden items-center gap-9 md:flex">
             {LINKS.map((link) => (
               <li key={link.href}>
-                <a href={link.href} onClick={(e) => go(e, link.href)} className="text-link text-[0.72rem] font-medium tracking-[0.24em] text-ink uppercase">
+                <a href={link.href} onClick={(e) => go(e, link.href)} className="text-link inline-flex min-h-11 items-center text-[0.72rem] font-medium tracking-[0.18em] text-ink uppercase lg:tracking-[0.24em]">
                   {link.label}
                 </a>
               </li>
             ))}
+            {visible && (
+              <li>
+                <SoundToggle />
+              </li>
+            )}
             <li>
-              <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-10 px-5 py-2 text-[0.7rem]">
+              <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-11 px-5 py-2 text-[0.7rem]">
                 RSVP
               </a>
             </li>
           </ul>
 
           <div className="flex items-center gap-2 md:hidden">
-            <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-10 px-4 py-2 text-[0.68rem]">
+            {visible && <SoundToggle />}
+            <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-11 px-4 py-2 text-[0.68rem]">
               RSVP
             </a>
             <button
@@ -130,7 +137,7 @@ export function SiteNav({ visible }: { visible: boolean }) {
                     ref={i === 0 ? firstLink : undefined}
                     href={link.href}
                     onClick={(e) => go(e, link.href)}
-                    className="flex items-baseline gap-4 py-1 font-display text-[2.6rem] leading-tight text-ink"
+                    className="flex min-h-11 items-baseline gap-4 py-2 font-display text-[clamp(2.15rem,10vw,2.75rem)] leading-tight text-ink"
                   >
                     <span className="text-xs tracking-[0.2em] text-gold-deep">0{i + 1}</span>
                     {link.label}

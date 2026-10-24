@@ -7,7 +7,7 @@ import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { directionsUrl } from '../../lib/links'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CalendarMenu } from '../ui/CalendarMenu'
-import { EventMotifIcon } from '../ui/ornaments'
+import { CornerFloral, EventMotifIcon } from '../ui/ornaments'
 import { SampleNote } from '../ui/SampleNote'
 import { SectionHeading } from '../ui/SectionHeading'
 
@@ -93,13 +93,14 @@ function EventItem({ event, index }: { event: WeddingEvent; index: number }) {
           {event.description}
         </p>
 
-        <div className={`mt-8 flex flex-wrap gap-3 ${right ? '' : 'lg:justify-end'}`} data-reveal data-reveal-delay="0.25">
-          <a href={directionsUrl(event.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+        <div className={`mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap ${right ? '' : 'lg:justify-end'}`} data-reveal data-reveal-delay="0.25">
+          <a href={directionsUrl(event.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
             <Navigation className="size-4" aria-hidden="true" />
             Directions
             <span className="sr-only">to {event.name} (opens Google Maps)</span>
           </a>
           <CalendarMenu
+            className="btn btn-outline w-full sm:w-auto"
             entry={{
               id: `${event.id}-${partnerOne}-${partnerTwo}`.toLowerCase(),
               title: `${event.name} · ${partnerOne} & ${partnerTwo}`,
@@ -135,8 +136,10 @@ export function WeddingEvents() {
   )
 
   return (
-    <section id="events" ref={root} aria-labelledby="events-title" className="paper-grain relative bg-ivory py-[clamp(5.5rem,13vw,11rem)]">
-      <div className="mx-auto max-w-6xl px-6 sm:px-10">
+    <section id="events" ref={root} aria-labelledby="events-title" className="paper-grain relative overflow-hidden bg-ivory py-[clamp(5.5rem,13vw,11rem)]">
+      <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-5 right-3 size-14 opacity-75 sm:top-8 sm:right-6 sm:size-24" />
+      <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-5 left-3 size-14 -scale-100 opacity-75 sm:bottom-8 sm:left-6 sm:size-24" />
+      <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <SectionHeading
           id="events-title"
           eyebrow="Four celebrations, one forever"
