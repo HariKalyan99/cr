@@ -96,6 +96,7 @@ export function rsvpWhatsappMessage(data: RsvpData) {
   ]
   if (data.attending === 'yes' && data.events.length) lines.push(`Celebrations: ${data.events.join(', ')}`)
   if (data.message.trim()) lines.push(`Note: ${data.message.trim()}`)
+  if (wedding.rsvp.previewImage) lines.push('', wedding.rsvp.previewImage)
   return lines.join('\n')
 }
 

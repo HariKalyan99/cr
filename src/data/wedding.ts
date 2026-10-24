@@ -307,6 +307,7 @@ export const wedding: WeddingConfig = {
     endpoint: '',
     whatsappNumber: '918105356529',
     whatsappContactName: 'the family',
+    previewImage: 'https://clsdpoijbtqlqrvzdmuw.supabase.co/storage/v1/object/public/wedding/images/wedding-rings.jpg',
   },
 
   closing: {
