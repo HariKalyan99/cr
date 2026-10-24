@@ -61,7 +61,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
       id="top"
       ref={root}
       aria-labelledby="hero-title"
-      className="paper-grain relative overflow-hidden bg-ivory pt-28 pb-20 sm:pt-32 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-28 lg:pb-24"
+      className="paper-grain relative overflow-hidden bg-ivory pt-[max(env(safe-area-inset-top),4.5rem)] pb-20 sm:pt-20 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-16 lg:pb-24"
     >
       <div data-parallax="mandala" aria-hidden="true" className="pointer-events-none absolute -top-[22vw] -right-[34vw] w-[86vw] opacity-40 lg:-top-[14vw] lg:-right-[16vw] lg:w-[58vw] lg:opacity-55">
         <Mandala src="/mandals/3.svg" className="w-full" />

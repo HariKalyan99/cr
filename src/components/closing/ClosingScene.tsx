@@ -129,7 +129,7 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
         </div>
       </div>
 
-      <footer className="relative mt-24 border-t border-gold-soft/15 px-6 py-8 text-center text-xs text-ivory/50 safe-bottom">
+      <footer className="relative mt-24 border-t border-gold-soft/15 px-24 pt-8 pb-[max(env(safe-area-inset-bottom),5.5rem)] text-center text-xs text-ivory/50">
         <p>
           Made with love for the families of {partnerOne} &amp; {partnerTwo}
         </p>
