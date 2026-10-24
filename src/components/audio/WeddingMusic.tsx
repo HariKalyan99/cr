@@ -60,15 +60,13 @@ export function WeddingMusic({ children }: { children: ReactNode }) {
   )
 }
 
-/** Speaker with three waves that grow outward. A slash marks the muted state. */
+/** Three arcs that grow outward. They rest lighter while the music is silent. */
 function WaveIcon({ muted }: { muted: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
-      <path d="M3.2 9.6v4.8h2.6L10.2 18.2V5.8L5.8 9.6H3.2z" fill="currentColor" stroke="none" />
-      <path d="M13.2 10.1a2.8 2.8 0 0 1 0 3.8" />
-      <path d="M15.6 7.8a5.4 5.4 0 0 1 0 8.4" />
-      <path d="M18.1 5.6a8.2 8.2 0 0 1 0 12.8" />
-      {muted && <path d="M13 7.2 L20.2 16.4" strokeWidth="1.6" />}
+    <svg viewBox="0 0 24 24" className={`size-6 ${muted ? 'opacity-45' : ''}`} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+      <path d="M3.5 9.4a4.4 4.4 0 0 1 0 5.2" />
+      <path d="M8.2 6.2a8.2 8.2 0 0 1 0 11.6" />
+      <path d="M13 3a12 12 0 0 1 0 18" />
     </svg>
   )
 }
