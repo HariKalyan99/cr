@@ -1,6 +1,7 @@
 import { ArrowUp, RotateCcw } from 'lucide-react'
 import { useRef } from 'react'
 import { wedding } from '../../data/wedding'
+import { mediaUrl } from '../../lib/media'
 import { formatDotted, parseDate } from '../../lib/dates'
 import { EASE_OUT, MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
@@ -55,7 +56,7 @@ function TronzlabsCredit({ className = '' }: { className?: string }) {
         <span className="text-red-500 underline underline-offset-2">z</span>
         <span className="text-ivory/70">labs</span>
       </span>
-      <img src="/logos/tronzlabs.png" alt="" width={16} height={16} className="studio-logo-glow h-4 w-4 shrink-0 object-contain" />
+      <img src={mediaUrl('logos/tronzlabs.png')} alt="" width={16} height={16} className="studio-logo-glow h-4 w-4 shrink-0 object-contain" />
     </a>
   )
 }
@@ -98,7 +99,7 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
     <section id="closing" ref={root} aria-labelledby="closing-title" className="on-dark relative overflow-hidden bg-night pt-[clamp(5.5rem,13vw,10rem)] text-ivory">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_30%,rgba(110,32,52,0.55),transparent_75%)]" />
       <div data-close-mandala aria-hidden="true" className="mandala-ring pointer-events-none absolute top-[46%] left-1/2 w-[min(80vw,30rem)] -translate-x-1/2 -translate-y-1/2 opacity-25">
-        <Mandala src="/mandals/3.svg" className="w-full" />
+        <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
       </div>
       <div className="relative z-[1] mx-auto max-w-3xl px-6 text-center">
         <div data-close-stage>

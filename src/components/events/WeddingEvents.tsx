@@ -5,6 +5,7 @@ import { wedding } from '../../data/wedding'
 import { formatDay, formatLongDate, formatMonth, formatTime, formatWeekday, istDateKey, isEventDayCurrent, nextDateKey, parseDate } from '../../lib/dates'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { directionsUrl } from '../../lib/links'
+import { mediaUrl } from '../../lib/media'
 import type { CalendarEntry } from '../../lib/calendar'
 import { CalendarMenu } from '../ui/CalendarMenu'
 import { CornerFloral, EventMotifIcon } from '../ui/ornaments'
@@ -124,8 +125,8 @@ function VenueGroup({ events }: { events: WeddingEvent[] }) {
   return (
     <li>
       <article className="relative overflow-hidden border border-gold/35 bg-paper/55 px-4 py-6 sm:px-8 sm:py-9" aria-labelledby={`venue-${first.id}`}>
-        <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-0 right-0 size-16 opacity-80 sm:size-24" />
-        <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 size-16 -scale-100 opacity-80 sm:size-24" />
+        <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute top-0 right-0 size-16 opacity-80 sm:size-24" />
+        <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 size-16 -scale-100 opacity-80 sm:size-24" />
         <header className="relative z-[1] border-b border-gold/25 pb-6">
           <div className="min-w-0">
             {oneDay && start ? (

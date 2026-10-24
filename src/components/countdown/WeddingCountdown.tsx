@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useRef } from 'react'
 import { wedding } from '../../data/wedding'
 import { formatLongDate, formatTime, formatWeekday, parseDate } from '../../lib/dates'
+import { mediaUrl } from '../../lib/media'
 import { easeOut } from '../../lib/motion'
 import { useCountdown } from '../../hooks/useCountdown'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
@@ -50,7 +51,7 @@ export function WeddingCountdown() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(140,40,64,0.55),transparent_75%)]" />
       <div aria-hidden="true" className="mandala-ring pointer-events-none absolute top-1/2 left-1/2 w-[min(78vw,28rem)] -translate-x-1/2 -translate-y-1/2 opacity-30">
         <div className="mandala-spin">
-          <Mandala src="/mandals/3.svg" className="w-full" />
+          <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
         </div>
       </div>
       <div className="relative z-[1] mx-auto max-w-5xl px-5 text-center">

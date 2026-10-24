@@ -8,13 +8,14 @@ import type { WeddingConfig, WeddingImage } from './types.ts'
  *  details before sharing. Set `isSampleContent: false` once they are final;
  *  that removes the "sample details" notices shown to guests.
  *
- *  Photos live in /public/images as `<name>-sm.webp` (640px) and
- *  `<name>-lg.webp` (full size). Width and height below match the large file.
+ *  Photos live in the Supabase `wedding` bucket as `images/<name>-sm.webp`
+ *  (640px) and `images/<name>-lg.webp` (full size). Width and height below
+ *  match the large file.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 const img = (name: string, width: number, height: number, alt: string, caption?: string): WeddingImage => ({
-  src: `/images/${name}`,
+  src: `images/${name}`,
   width,
   height,
   alt,

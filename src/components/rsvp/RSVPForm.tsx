@@ -5,6 +5,7 @@ import { wedding } from '../../data/wedding'
 import { formatPlainDate, formatShortDate, parseDate } from '../../lib/dates'
 import { transition } from '../../lib/motion'
 import { isRsvpEndpointConfigured, normalizePhone, rsvpWhatsappUrl, submitRsvp, type RsvpData, type RsvpResult } from '../../lib/rsvp'
+import { mediaUrl } from '../../lib/media'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CornerFloral } from '../ui/ornaments'
 import { SectionHeading } from '../ui/SectionHeading'
@@ -94,8 +95,8 @@ export function RSVPForm() {
         <div className="relative mx-auto mt-14 max-w-2xl sm:mt-20" data-reveal>
           <div className="relative bg-ivory px-5 pt-16 pb-10 shadow-[0_40px_80px_-40px_rgba(61,18,32,0.45)] sm:px-14 sm:py-14">
             <div aria-hidden="true" className="pointer-events-none absolute inset-2.5 border border-gold/45 sm:inset-4" />
-            <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-1 right-1 size-12 opacity-80 sm:size-16" />
-            <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1 size-12 -scale-100 opacity-80 sm:size-16" />
+            <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute top-1 right-1 size-12 opacity-80 sm:size-16" />
+            <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1 size-12 -scale-100 opacity-80 sm:size-16" />
 
             <h3 className="relative text-center font-script text-[2.7rem] leading-none text-gold-deep sm:text-5xl">Kindly reply</h3>
             <p className="mt-2 text-center text-sm text-ink-soft">

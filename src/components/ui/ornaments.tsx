@@ -1,16 +1,17 @@
 import type { SVGProps } from 'react'
+import { mediaUrl } from '../../lib/media'
 
 type SvgProps = SVGProps<SVGSVGElement>
 
 const petal = (len: number, w: number) =>
   `M0 0 C${w} ${-len * 0.35} ${w} ${-len * 0.75} 0 ${-len} C${-w} ${-len * 0.75} ${-w} ${-len * 0.35} 0 0Z`
 
-/** Intertwined C R mark from public/logos. */
+/** Intertwined C R mark from the wedding storage bucket. */
 export function MonogramLogo({ className }: { className?: string }) {
-  return <img src="/logos/logo.png" alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
+  return <img src={mediaUrl('logos/logo.png')} alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
 }
 
-/** One of the mandalas in public/mandals. The parent owns any rotation, scale, or scroll motion. */
+/** One of the mandalas in the wedding storage bucket. The parent owns any rotation, scale, or scroll motion. */
 export function Mandala({ src, className }: { src: string; className?: string }) {
   return <img src={src} alt="" draggable={false} className={`pointer-events-none aspect-square w-full object-cover object-center select-none ${className ?? ''}`} />
 }
@@ -30,7 +31,7 @@ export function Divider({ className, ...props }: SvgProps) {
   )
 }
 
-/** A corner vine from public/vines. Each file is drawn for one corner; mirror the box to the others. */
+/** A corner vine from the wedding storage bucket. Each file is drawn for one corner; mirror the box to the others. */
 export function CornerFloral({ src, className }: { src: string; className?: string }) {
   return <img src={src} alt="" draggable={false} className={`pointer-events-none aspect-square object-contain select-none ${className ?? ''}`} />
 }

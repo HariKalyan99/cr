@@ -4,7 +4,7 @@
  */
 
 export interface WeddingImage {
-  /** Path prefix inside /public. `-sm.webp` (640px) and `-lg.webp` (full size) must both exist. */
+  /** Storage path prefix. `-sm.webp` (640px) and `-lg.webp` (full size) must both exist. */
   src: string
   /** Intrinsic size of the `-lg` file; used for aspect ratio and srcset widths. */
   width: number

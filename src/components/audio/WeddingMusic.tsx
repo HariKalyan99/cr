@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react'
+import { mediaUrl } from '../../lib/media'
 
-const SRC = '/music/main_song.mp3'
+const SRC = mediaUrl('music/main_song.mp3')
 
 type MusicControls = {
   /** True while the track is playing and not muted. */
