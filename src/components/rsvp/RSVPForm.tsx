@@ -4,18 +4,19 @@ import { useId, useRef, useState, type FormEvent } from 'react'
 import { wedding } from '../../data/wedding'
 import { formatPlainDate, formatShortDate, parseDate } from '../../lib/dates'
 import { transition } from '../../lib/motion'
-import { isRsvpEndpointConfigured, rsvpWhatsappUrl, submitRsvp, type RsvpData, type RsvpResult } from '../../lib/rsvp'
+import { isRsvpEndpointConfigured, normalizePhone, rsvpWhatsappUrl, submitRsvp, type RsvpData, type RsvpResult } from '../../lib/rsvp'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CornerFloral } from '../ui/ornaments'
 import { SectionHeading } from '../ui/SectionHeading'
 
-type Errors = Partial<Record<'name' | 'attending' | 'events' | 'message', string>>
+type Errors = Partial<Record<'name' | 'phone' | 'attending' | 'events' | 'message', string>>
 
 const MAX_MESSAGE = 500
 
 function validate(data: Omit<RsvpData, 'attending'> & { attending: RsvpData['attending'] | '' }): Errors {
   const errors: Errors = {}
   if (data.name.trim().length < 2) errors.name = 'Please enter your full name.'
+  if (!normalizePhone(data.phone)) errors.phone = 'Please enter a 10-digit mobile number.'
   if (!data.attending) errors.attending = 'Please let us know whether you can attend.'
   if (data.attending === 'yes' && data.events.length === 0) errors.events = 'Please choose at least one celebration.'
   if (data.message.length > MAX_MESSAGE) errors.message = `Please keep your note under ${MAX_MESSAGE} characters.`
@@ -30,6 +31,7 @@ export function RSVPForm() {
   useScrollReveal(root)
 
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [attending, setAttending] = useState<RsvpData['attending'] | ''>('')
   const [guests, setGuests] = useState(1)
   const [chosen, setChosen] = useState<string[]>(() => events.map((e) => e.name))
@@ -38,13 +40,13 @@ export function RSVPForm() {
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<RsvpResult | null>(null)
 
-  const data: RsvpData = { name: name.trim(), attending: attending || 'no', guests, events: chosen, message }
+  const data: RsvpData = { name: name.trim(), phone: normalizePhone(phone), attending: attending || 'no', guests, events: chosen, message }
   const whatsapp = attending ? rsvpWhatsappUrl(data) : null
   const whatsappConfigured = rsvpWhatsappUrl({ ...data, attending: 'yes' }) !== null
   const respondBy = formatPlainDate(rsvp.respondBy)
 
   const check = () => {
-    const next = validate({ name, attending, guests, events: chosen, message })
+    const next = validate({ name, phone, attending, guests, events: chosen, message })
     setErrors(next)
     if (Object.keys(next).length) {
       requestAnimationFrame(() => errorSummary.current?.focus())
@@ -131,6 +133,33 @@ export function RSVPForm() {
                 {errors.name && (
                   <p id={`${formId}-name-error`} className="mt-2 text-sm text-burgundy">
                     {errors.name}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor={`${formId}-phone`} className="eyebrow">
+                  Mobile number
+                </label>
+                <input
+                  id={`${formId}-phone`}
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  value={phone}
+                  onChange={(e) => {
+                    clearError('phone')
+                    setPhone(e.target.value)
+                  }}
+                  placeholder="10-digit mobile number"
+                  aria-invalid={!!errors.phone}
+                  aria-describedby={errors.phone ? `${formId}-phone-error` : undefined}
+                  className={field}
+                />
+                {errors.phone && (
+                  <p id={`${formId}-phone-error`} className="mt-2 text-sm text-burgundy">
+                    {errors.phone}
                   </p>
                 )}
               </div>

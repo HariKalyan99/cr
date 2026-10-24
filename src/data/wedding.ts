@@ -9,9 +9,7 @@ import type { WeddingConfig, WeddingImage } from './types.ts'
  *  that removes the "sample details" notices shown to guests.
  *
  *  Photos live in /public/images as `<name>-sm.webp` (640px) and
- *  `<name>-lg.webp` (full size). The current photos are temporary editorial
- *  stand-ins; replace them with your own using the same naming pattern and
- *  update width/height below.
+ *  `<name>-lg.webp` (full size). Width and height below match the large file.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -75,52 +73,52 @@ export const wedding: WeddingConfig = {
     request: 'request the pleasure of your company at the celebration of their wedding',
   },
 
-  // SAMPLE story — replace with your own chapters. Kept deliberately non-specific.
   story: {
     title: 'Our Story',
-    intro: 'Some chapters are written slowly, in small moments that only make sense when you look back.',
+    intro: 'A few frames from the two of them, in silk, gold and fresh mehendi.',
     chapters: [
       {
         id: 'first-hello',
         label: 'Chapter I · Where it began',
         title: 'A first hello',
-        body: 'It started with an ordinary afternoon and a conversation neither of us wanted to end. Two cups went cold on the table while the hours quietly disappeared.',
-        image: img('story-first-hello', 1152, 864, 'Two cups of coffee on a small wooden café table beside a sunlit window'),
+        body: 'Seated side by side, already at ease in each other’s company.',
+        image: img('couple-seated', 1600, 1486, 'Rakshitha in a gold-embroidered silk saree beside Charan, seated in a pinstriped suit and bow tie'),
       },
       {
-        id: 'letters',
-        label: 'Chapter II · Growing closer',
-        title: 'Letters, journeys & long talks',
-        body: 'Across cities and calendars, we kept finding our way back to each other — through late-night calls, small surprises, and a growing collection of shared memories.',
-        image: img('story-letters', 864, 1152, 'Handwritten letters, instant photographs and a dried rose resting on ivory linen'),
+        id: 'together',
+        label: 'Chapter II · Side by side',
+        title: 'Side by side',
+        body: 'On the steps together, matching each other step for step.',
+        image: img('couple-steps', 1146, 1600, 'Rakshitha in a burgundy and gold silk saree and Charan in a pinstriped suit, laughing on stone steps'),
       },
       {
         id: 'proposal',
         label: 'Chapter III · The question',
         title: 'And then, a yes',
-        body: 'One evening, with a ring, a racing heart and a question asked a little nervously, forever stopped being an idea and became a promise.',
-        image: img('story-ring', 1152, 864, 'An open burgundy velvet ring box holding a gold ring on a bed of jasmine flowers'),
+        body: 'Two gold rings rest in a mehendi-painted palm, his hand open beneath hers.',
+        image: img('wedding-rings', 1600, 1066, 'Two gold rings held in a palm covered with fresh mehendi, stacked bangles at the wrist'),
       },
       {
         id: 'forever',
         label: 'Chapter IV · Two families, one promise',
         title: 'Hand in hand',
-        body: 'With the blessings of our elders and the love of everyone who walked with us, we begin a new chapter — and we would love for you to be there.',
-        image: img('story-hands', 864, 1152, "A bride's hands with intricate mehendi and gold bangles resting on the groom's hand"),
+        body: 'Silk, gold bangles and fresh mehendi — the details of a day shared with both families.',
+        image: img('mehendi-silk', 1066, 1600, 'Hands folded in a lap, covered in mehendi and gold rings, with stacks of red and gold bangles over a silk saree'),
       },
     ],
   },
 
   gallery: {
     title: 'Moments in Gold',
-    intro: 'A glimpse of the colours, rituals and quiet details we are gathering for our celebration.',
+    intro: 'Silk, mehendi, and the flower-draped setting prepared for the celebrations.',
     images: [
-      img('gallery-silhouette', 1280, 720, 'A couple walking hand in hand beneath string lights and marigold garlands at dusk', 'Beneath the lights'),
-      img('gallery-mehendi', 864, 1152, 'Hands decorated with fresh mehendi cupping rose petals, with green and gold bangles', 'Mehendi'),
-      img('gallery-diyas', 1024, 1024, 'Rows of lit brass diyas on a stone floor scattered with marigold and rose petals', 'A thousand small lights'),
-      img('gallery-silk', 864, 1152, 'A burgundy Kanjivaram silk saree with a gold zari border and a strand of jasmine', 'Silk & jasmine'),
-      img('gallery-haldi', 1152, 864, 'A brass bowl of turmeric paste surrounded by marigolds and mango leaves', 'Haldi morning'),
-      img('gallery-reception', 1152, 864, 'An evening table set with ivory linen, gold cutlery, candles and burgundy roses', 'An evening to remember'),
+      { ...img('floral-canopy', 1600, 1066, 'A long canopy of white and magenta flower garlands over a garden ceremony', 'Under the garlands'), warm: true },
+      img('couple-steps', 1146, 1600, 'Charan and Rakshitha on stone steps, she in a silk saree and he in a pinstriped suit', 'On the steps'),
+      img('couple-seated', 1600, 1486, 'Rakshitha in an embroidered silk blouse beside Charan in a pinstriped suit', 'Side by side'),
+      img('mehendi-silk', 1066, 1600, 'Mehendi-covered hands, gold rings and stacked bangles resting on a silk saree', 'Mehendi and silk'),
+      img('wedding-rings', 1600, 1066, 'Two gold rings in a mehendi-painted palm', 'The rings'),
+      { ...img('ceremony-stage', 1600, 1066, 'A carved wooden doorway framed by jasmine, brass lamps and a kolam, with ceremonial elephants', 'The ceremony'), warm: true },
+      { ...img('floral-seat', 1066, 1600, 'A white and gold settee beneath a jasmine-draped carved doorway and hanging flowers', 'Among the flowers'), warm: true },
     ],
   },
 
@@ -161,13 +159,14 @@ export const wedding: WeddingConfig = {
       id: 'sangeet',
       name: 'Sangeet',
       tagline: 'Music & celebration',
-      start: '2026-10-27T00:00:00+05:30',
+      start: '2026-10-27T15:30:00+05:30',
+      timeLabel: '3:30 PM onwards IST',
       space: 'Farm house',
       venueName: FARM.name,
       address: FARM.address,
       mapsQuery: FARM.mapsQuery,
       mapsUrl: FARM.mapsUrl,
-      description: 'Music and dance at M Gundappa Farm House on 27 October. A starting time is not printed on the card.',
+      description: 'Music and dance at M Gundappa Farm House on 27 October, from 3:30 in the afternoon.',
       motif: 'sangeet',
       accent: '#2c4a7a',
     },
@@ -205,53 +204,18 @@ export const wedding: WeddingConfig = {
 
   venues: [
     {
-      id: 'hall',
-      when: 'Reception · 29 October · Muhurtham · 30 October',
-      name: HALL.name,
-      address: HALL.address,
-      mapsQuery: HALL.mapsQuery,
-      mapsUrl: HALL.mapsUrl,
-      description: 'The reception and the Muhurtham are both held at this hall on Magadi Road. Guest rooms are available on the property.',
-      travel: [
-        {
-          id: 'hall-rail',
-          kind: 'rail',
-          title: 'Nearest railway',
-          detail: 'Kengeri Railway Station',
-          note: 'About 6 km away',
-        },
-        {
-          id: 'hall-metro',
-          kind: 'metro',
-          title: 'Nearest metro',
-          detail: 'Kengeri, Purple Line',
-          note: 'About 7 km away',
-        },
-        {
-          id: 'hall-air',
-          kind: 'airport',
-          title: 'Airport',
-          detail: 'Kempegowda International Airport (BLR)',
-          note: 'About 37 km away · allow extra time by road',
-        },
-        {
-          id: 'hall-farm',
-          kind: 'road',
-          title: 'The other venue',
-          detail: 'M Gundappa Farm House, Maragondanahalli',
-          note: 'About 5 km from this hall · Haldi, Mehendi and Sangeet',
-        },
-      ],
-    },
-    {
       id: 'farm',
       when: 'Haldi, Mehendi & Sangeet · 27 October',
+      celebrations: [{ name: 'Haldi, Mehendi & Sangeet', date: '27 October' }],
       name: FARM.name,
       address: FARM.address,
       mapsQuery: FARM.mapsQuery,
       mapsUrl: FARM.mapsUrl,
       description: 'The three celebrations on Tuesday, 27 October, are at this farm house on Muktinaga Temple Road.',
-      queries: '97432 47776 · 98453 59508',
+      contacts: [
+        { name: 'Girija', phone: '9743247776' },
+        { name: 'Hanumantharaju', phone: '9845359508' },
+      ],
       travel: [
         {
           id: 'farm-tree',
@@ -283,14 +247,67 @@ export const wedding: WeddingConfig = {
         },
       ],
     },
+    {
+      id: 'hall',
+      when: 'Reception · 29 October · Muhurtham · 30 October',
+      celebrations: [
+        { name: 'Reception', date: '29 October', emphasis: true },
+        { name: 'Muhurtham', date: '30 October', emphasis: true },
+      ],
+      name: HALL.name,
+      address: HALL.address,
+      mapsQuery: HALL.mapsQuery,
+      mapsUrl: HALL.mapsUrl,
+      description: 'The reception and the Muhurtham are both held at this hall on Magadi Road. Guest rooms are available on the property.',
+      contacts: [
+        { name: 'Girija', phone: '9743247776' },
+        { name: 'Srinivas', phone: '9900087679' },
+        { name: 'Charan', phone: '8105356529' },
+        { name: 'Manjula', phone: '9901678668' },
+        { name: 'Hanumantharaju', phone: '9845359508' },
+        { name: 'Rakshitha', phone: '9945659508' },
+      ],
+      travel: [
+        {
+          id: 'hall-rail',
+          kind: 'rail',
+          title: 'Nearest railway',
+          detail: 'Kengeri Railway Station',
+          note: 'About 6 km away',
+        },
+        {
+          id: 'hall-metro',
+          kind: 'metro',
+          title: 'Nearest metro',
+          detail: 'Kengeri, Purple Line',
+          note: 'About 7 km away',
+        },
+        {
+          id: 'hall-air',
+          kind: 'airport',
+          title: 'Airport',
+          detail: 'Kempegowda International Airport (BLR)',
+          note: 'About 37 km away · allow extra time by road',
+        },
+        {
+          id: 'hall-farm',
+          kind: 'road',
+          title: 'The other venue',
+          detail: 'M Gundappa Farm House, Maragondanahalli',
+          note: 'About 5 km from this hall · Haldi, Mehendi and Sangeet',
+        },
+      ],
+    },
   ],
 
   rsvp: {
     respondBy: '',
     maxGuests: 6,
+    // Filled from VITE_SUPABASE_URL at runtime. Set this only to override that function.
     endpoint: '',
     whatsappNumber: '918105356529',
     whatsappContactName: 'the family',
+    previewImage: 'https://clsdpoijbtqlqrvzdmuw.supabase.co/storage/v1/object/public/wedding/images/wedding-rings.jpg',
   },
 
   closing: {

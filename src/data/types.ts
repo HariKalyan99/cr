@@ -11,6 +11,8 @@ export interface WeddingImage {
   height: number
   alt: string
   caption?: string
+  /** Soft amber wash for daylight photos that read cool. */
+  warm?: boolean
 }
 
 export interface StoryChapter {
@@ -57,10 +59,24 @@ export interface TravelInfo {
   note?: string
 }
 
+export interface VenueCelebration {
+  name: string
+  date: string
+  /** Reception and Muhurtham are marked so they read ahead of the other days. */
+  emphasis?: boolean
+}
+
+export interface VenueContact {
+  name: string
+  /** Ten-digit Indian mobile, digits only. */
+  phone: string
+}
+
 export interface VenuePlace {
   id: string
   /** Which celebrations happen here. */
   when: string
+  celebrations?: VenueCelebration[]
   name: string
   address: string
   mapsQuery: string
@@ -68,6 +84,7 @@ export interface VenuePlace {
   description: string
   /** Phone numbers printed for guests, separate from the RSVP WhatsApp. */
   queries?: string
+  contacts?: VenueContact[]
   travel: TravelInfo[]
 }
 
@@ -117,13 +134,15 @@ export interface WeddingConfig {
     respondBy: string
     maxGuests: number
     /**
-     * Optional HTTPS endpoint that accepts a JSON POST (Formspree, Google Apps Script,
-     * a serverless function…). When empty, the form will not pretend to save anything.
+     * Optional HTTPS override. Leave empty to use the Supabase `rsvp` function at
+     * `${VITE_SUPABASE_URL}/functions/v1/rsvp`. When neither is set, the form does not pretend to save anything.
      */
     endpoint: string
     /** WhatsApp number in international format, digits only (e.g. 919876543210). */
     whatsappNumber: string
     whatsappContactName: string
+    /** Public photo WhatsApp shows as the preview on the RSVP message. */
+    previewImage: string
   }
   closing: {
     title: string

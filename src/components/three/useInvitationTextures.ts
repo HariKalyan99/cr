@@ -23,9 +23,9 @@ export interface InvitationTextures {
 }
 
 const SIZES: Record<DeviceTier, { paper: number; card: number; seal: number; aniso: number }> = {
-  high: { paper: 1536, card: 2048, seal: 512, aniso: 8 },
-  mobile: { paper: 1024, card: 1536, seal: 384, aniso: 4 },
-  low: { paper: 768, card: 1024, seal: 256, aniso: 1 },
+  high: { paper: 1536, card: 4096, seal: 512, aniso: 8 },
+  mobile: { paper: 1024, card: 2560, seal: 384, aniso: 4 },
+  low: { paper: 768, card: 2048, seal: 256, aniso: 1 },
 }
 
 function loadImage(src: string) {
@@ -53,7 +53,7 @@ export function useInvitationTextures(dims: EnvelopeDims, cardAspect: number, ti
     let cancelled = false
     let created: InvitationTextures | null = null
 
-    Promise.all([loadCanvasFonts(), loadImage('/vines/6.svg'), loadImage('/logos/1.png')]).then(([, floral, logo]) => {
+    Promise.all([loadCanvasFonts(), loadImage('/vines/6.svg'), loadImage('/logos/logo.png')]).then(([, floral, logo]) => {
       if (cancelled) return
       const s = SIZES[tier]
       const date = parseDate(wedding.weddingDateTime)

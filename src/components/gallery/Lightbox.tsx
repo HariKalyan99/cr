@@ -6,6 +6,7 @@ import { easeOut } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
 import { imageSources } from '../../lib/images'
+import { WarmWash } from './WarmWash'
 
 interface Props {
   images: WeddingImage[]
@@ -108,16 +109,19 @@ export function Lightbox({ images, index, onClose, onNavigate }: Props) {
             dragElastic={0.25}
             onDragEnd={onDragEnd}
           >
-            <img
-              src={src}
-              srcSet={srcSet}
-              sizes="100vw"
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              draggable={false}
-              className="max-h-[calc(100svh-11rem)] w-auto object-contain shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]"
-            />
+            <div className="relative isolate">
+              <img
+                src={src}
+                srcSet={srcSet}
+                sizes="100vw"
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                draggable={false}
+                className="max-h-[calc(100svh-11rem)] w-auto object-contain shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]"
+              />
+              {image.warm && <WarmWash />}
+            </div>
             {image.caption && <figcaption className="mt-4 font-display text-lg text-ivory/85 italic">{image.caption}</figcaption>}
           </motion.figure>
         </AnimatePresence>

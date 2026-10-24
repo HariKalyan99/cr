@@ -5,7 +5,17 @@ import { downloadIcs, googleCalendarUrl, type CalendarEntry } from '../../lib/ca
 import { transition } from '../../lib/motion'
 
 /** "Add to calendar" with Google Calendar and a universal .ics (Apple, Outlook, etc.). */
-export function CalendarMenu({ entry, label = 'Add to calendar', className = 'btn btn-outline' }: { entry: CalendarEntry; label?: string; className?: string }) {
+export function CalendarMenu({
+  entry,
+  label = 'Add to calendar',
+  className = 'btn btn-outline',
+  menuClassName = 'left-0',
+}: {
+  entry: CalendarEntry
+  label?: string
+  className?: string
+  menuClassName?: string
+}) {
   const [open, setOpen] = useState(false)
   const wrapper = useRef<HTMLDivElement>(null)
   const menuId = useId()
@@ -34,7 +44,7 @@ export function CalendarMenu({ entry, label = 'Add to calendar', className = 'bt
 
   return (
     <div ref={wrapper} className="relative w-full sm:w-auto">
-      <button type="button" className={className} aria-expanded={open} aria-controls={menuId} onClick={() => setOpen((v) => !v)}>
+      <button type="button" className={`${className} whitespace-nowrap`} aria-expanded={open} aria-controls={menuId} onClick={() => setOpen((v) => !v)}>
         <CalendarPlus className="size-4" aria-hidden="true" />
         {label}
       </button>
@@ -42,7 +52,7 @@ export function CalendarMenu({ entry, label = 'Add to calendar', className = 'bt
         {open && (
           <motion.div
             id={menuId}
-            className="absolute left-0 top-full z-20 mt-2 w-60 overflow-hidden rounded-xl border border-gold/30 bg-ivory p-1.5 text-ink shadow-[0_20px_50px_-20px_rgba(42,30,27,0.45)]"
+            className={`absolute top-full z-20 mt-2 w-full overflow-hidden rounded-xl border border-gold/30 bg-ivory p-1.5 text-ink shadow-[0_20px_50px_-20px_rgba(42,30,27,0.45)] sm:w-60 ${menuClassName}`}
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}

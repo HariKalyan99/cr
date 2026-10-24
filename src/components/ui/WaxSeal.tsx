@@ -29,7 +29,7 @@ export function WaxSeal(props: SVGProps<SVGSVGElement>) {
         const t = (i / 28) * Math.PI * 2
         return <circle key={i} cx={Math.cos(t) * 36.7} cy={-Math.sin(t) * 36.7} r={0.7} fill={`url(#foil-${id})`} />
       })}
-      <image href="/logos/1.png" x={-20} y={-20} width={40} height={40} />
+      <image href="/logos/logo.png" x={-23} y={-23} width={46} height={46} />
       <path d="M-30 -18 A36 36 0 0 1 -6 -34" stroke="#ffffff" strokeOpacity={0.18} strokeWidth={3} fill="none" strokeLinecap="round" />
     </svg>
   )

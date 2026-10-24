@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react'
 
-const SRC = '/music/wed1.mp3'
+const SRC = '/music/main_song.mp3'
 
 type MusicControls = {
   /** True while the track is playing and not muted. */

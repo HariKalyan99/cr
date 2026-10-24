@@ -3,8 +3,12 @@ import { parseDate } from './dates'
 export interface CalendarEntry {
   id: string
   title: string
+  /** ISO date-time, or `YYYY-MM-DD` when `allDay` is set. */
   start: string
+  /** ISO date-time, or an exclusive `YYYY-MM-DD` when `allDay` is set. */
   end: string
+  /** Save the calendar day when the card does not print a starting time. */
+  allDay?: boolean
   location: string
   description: string
 }
@@ -12,14 +16,22 @@ export interface CalendarEntry {
 /** 20270212T130000Z */
 const toUtcStamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
 
+const dateStamp = (isoDate: string) => isoDate.replace(/-/g, '')
+
 export function googleCalendarUrl(entry: CalendarEntry) {
-  const start = parseDate(entry.start)
-  const end = parseDate(entry.end)
-  if (!start || !end) return null
+  const dates = entry.allDay
+    ? `${dateStamp(entry.start)}/${dateStamp(entry.end)}`
+    : (() => {
+        const start = parseDate(entry.start)
+        const end = parseDate(entry.end)
+        if (!start || !end) return null
+        return `${toUtcStamp(start)}/${toUtcStamp(end)}`
+      })()
+  if (!dates) return null
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: entry.title,
-    dates: `${toUtcStamp(start)}/${toUtcStamp(end)}`,
+    dates,
     details: entry.description,
     location: entry.location,
   })
@@ -42,9 +54,15 @@ function foldLine(line: string) {
 }
 
 export function buildIcs(entry: CalendarEntry) {
-  const start = parseDate(entry.start)
-  const end = parseDate(entry.end)
-  if (!start || !end) return null
+  const when = entry.allDay
+    ? [`DTSTART;VALUE=DATE:${dateStamp(entry.start)}`, `DTEND;VALUE=DATE:${dateStamp(entry.end)}`]
+    : (() => {
+        const start = parseDate(entry.start)
+        const end = parseDate(entry.end)
+        if (!start || !end) return null
+        return [`DTSTART:${toUtcStamp(start)}`, `DTEND:${toUtcStamp(end)}`]
+      })()
+  if (!when) return null
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -54,8 +72,7 @@ export function buildIcs(entry: CalendarEntry) {
     'BEGIN:VEVENT',
     `UID:${entry.id}@wedding-invitation`,
     `DTSTAMP:${toUtcStamp(new Date())}`,
-    `DTSTART:${toUtcStamp(start)}`,
-    `DTEND:${toUtcStamp(end)}`,
+    ...when,
     `SUMMARY:${escapeIcs(entry.title)}`,
     `DESCRIPTION:${escapeIcs(entry.description)}`,
     `LOCATION:${escapeIcs(entry.location)}`,

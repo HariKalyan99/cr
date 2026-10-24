@@ -1,124 +1,177 @@
 import { Clock, MapPin, Navigation, Shirt } from 'lucide-react'
-import { useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import type { WeddingEvent } from '../../data/types'
 import { wedding } from '../../data/wedding'
-import { formatDay, formatLongDate, formatMonth, formatTime, formatWeekday, parseDate } from '../../lib/dates'
-import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
-import { directionsUrl } from '../../lib/links'
+import { formatDay, formatLongDate, formatMonth, formatTime, formatWeekday, istDateKey, isEventDayCurrent, nextDateKey, parseDate } from '../../lib/dates'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { directionsUrl } from '../../lib/links'
+import type { CalendarEntry } from '../../lib/calendar'
 import { CalendarMenu } from '../ui/CalendarMenu'
 import { CornerFloral, EventMotifIcon } from '../ui/ornaments'
 import { SampleNote } from '../ui/SampleNote'
 import { SectionHeading } from '../ui/SectionHeading'
 
-function EventItem({ event, index }: { event: WeddingEvent; index: number }) {
+function useTodayKey() {
+  const [today, setToday] = useState(() => istDateKey(new Date()))
+  useEffect(() => {
+    const tick = () => setToday(istDateKey(new Date()))
+    const id = window.setInterval(tick, 60_000)
+    document.addEventListener('visibilitychange', tick)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener('visibilitychange', tick)
+    }
+  }, [])
+  return today
+}
+
+function timeText(event: WeddingEvent) {
   const start = parseDate(event.start)
   const end = parseDate(event.end)
-  const right = index % 2 === 1
+  if (event.timeLabel) return event.timeLabel
+  if (start && end) return `${formatTime(start)} – ${formatTime(end)} ${wedding.timeZoneLabel}`
+  return 'Time to be shared'
+}
+
+/** A calendar hold for each celebration. Events without a printed finish run until the end of that day. */
+function calendarEntry(event: WeddingEvent): CalendarEntry {
   const { partnerOne, partnerTwo } = wedding.couple
+  const start = parseDate(event.start)
+  const day = start ? istDateKey(start) : event.start.slice(0, 10)
+  const description = [timeText(event), event.description, event.dressCode ? `Dress code: ${event.dressCode.label}` : ''].filter(Boolean).join('\n')
+  const shared = {
+    id: `${event.id}-${partnerOne}-${partnerTwo}`.toLowerCase().replace(/\s+/g, '-'),
+    title: `${event.name} · ${partnerOne} & ${partnerTwo}`,
+    location: `${event.venueName}, ${event.address}`,
+    description,
+  }
+  if (event.end) return { ...shared, start: event.start, end: event.end }
+  if (!event.timeLabel) return { ...shared, start: day, end: nextDateKey(day), allDay: true }
+  return { ...shared, start: event.start, end: `${nextDateKey(day)}T00:00:00+05:30` }
+}
 
+function sameDay(events: WeddingEvent[]) {
+  const keys = events.map((event) => {
+    const start = parseDate(event.start)
+    return start ? istDateKey(start) : ''
+  })
+  return keys.every((key) => key && key === keys[0])
+}
+
+function EventRow({ event, showDate }: { event: WeddingEvent; showDate: boolean }) {
+  const start = parseDate(event.start)
   return (
-    <li className="relative grid gap-8 pl-16 sm:pl-24 lg:grid-cols-2 lg:gap-24 lg:pl-0">
-      {/* Medallion on the thread */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 left-0 flex size-12 items-center justify-center rounded-full border bg-ivory shadow-[0_0_0_6px_var(--color-ivory)] sm:left-3 sm:size-14 lg:left-1/2 lg:size-16 lg:-translate-x-1/2"
-        style={{ borderColor: event.accent, color: event.accent }}
-        data-reveal
-      >
-        <EventMotifIcon motif={event.motif} className="size-7 sm:size-8 lg:size-9" />
-      </div>
-
-      {/* Editorial date (desktop) */}
-      <div aria-hidden="true" className={`hidden lg:flex lg:flex-col ${right ? 'lg:order-1 lg:items-end lg:text-right' : 'lg:order-2 lg:items-start'}`} data-reveal data-reveal-delay="0.1">
-        {start && (
-          <>
-            <span className="display text-[10rem] leading-[0.8]" style={{ color: event.accent, opacity: 0.85 }}>
-              {formatDay(start)}
-            </span>
-            <span className="mt-4 text-[0.75rem] tracking-[0.4em] text-ink-soft uppercase">
-              {formatMonth(start)} · {formatWeekday(start)}
-            </span>
-          </>
-        )}
-      </div>
-
-      <article className={right ? 'lg:order-2' : 'lg:order-1 lg:text-right'} aria-labelledby={`event-${event.id}`}>
-        <p className="eyebrow" data-reveal style={{ color: event.accent }}>
-          {start ? `${formatWeekday(start)} · ${formatLongDate(start)}` : 'Date to be announced'}
-        </p>
-        <h3 id={`event-${event.id}`} className="display mt-3 text-[clamp(3rem,8vw,4.75rem)] text-ink" data-reveal data-reveal-delay="0.05">
-          {event.name}
-        </h3>
-        <p className="mt-1 font-display text-xl text-ink-soft italic" data-reveal data-reveal-delay="0.1">
-          {event.tagline}
-        </p>
-
-        <dl className={`mt-7 space-y-3 text-[0.95rem] ${right ? '' : 'lg:ml-auto'} max-w-md`} data-reveal data-reveal-delay="0.15">
-          <div className={`flex items-start gap-3 ${right ? '' : 'lg:flex-row-reverse'}`}>
-            <dt className="mt-1">
-              <Clock className="size-4 text-gold-deep" aria-hidden="true" />
-              <span className="sr-only">Time</span>
-            </dt>
-            <dd>
-              {event.timeLabel
-                ? event.timeLabel
-                : start && end
-                  ? `${formatTime(start)} – ${formatTime(end)} ${wedding.timeZoneLabel}`
-                  : 'Time to be shared'}
-            </dd>
-          </div>
-          <div className={`flex items-start gap-3 ${right ? '' : 'lg:flex-row-reverse'}`}>
-            <dt className="mt-1">
-              <MapPin className="size-4 text-gold-deep" aria-hidden="true" />
-              <span className="sr-only">Venue</span>
-            </dt>
-            <dd>
-              {event.space} · {event.venueName}
-            </dd>
-          </div>
-          {event.dressCode && (
-            <div className={`flex items-start gap-3 ${right ? '' : 'lg:flex-row-reverse'}`}>
-              <dt className="mt-1">
-                <Shirt className="size-4 text-gold-deep" aria-hidden="true" />
-                <span className="sr-only">Dress code</span>
-              </dt>
-              <dd className={`flex flex-wrap items-center gap-3 ${right ? '' : 'lg:flex-row-reverse'}`}>
-                {event.dressCode.label}
-                <span className="flex -space-x-1" aria-hidden="true">
-                  {event.dressCode.swatches.map((c) => (
-                    <span key={c} className="size-4 rounded-full ring-2 ring-ivory" style={{ background: c }} />
-                  ))}
-                </span>
-              </dd>
+    <li className="border-t border-gold/25 py-6 first:border-t-0 first:pt-0 sm:py-7">
+      <div className="flex gap-3.5 sm:gap-5">
+        <div
+          aria-hidden="true"
+          className="flex size-11 shrink-0 items-center justify-center rounded-full border bg-ivory sm:size-12"
+          style={{ borderColor: event.accent, color: event.accent }}
+        >
+          <EventMotifIcon motif={event.motif} className="size-6 sm:size-7" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+            <div className="min-w-0">
+              {showDate && start && (
+                <p className="eyebrow" style={{ color: event.accent }}>
+                  {formatWeekday(start)} · {formatLongDate(start)}
+                </p>
+              )}
+              <h4 id={`event-${event.id}`} className="display text-[clamp(2rem,6vw,3.15rem)] leading-none text-ink">
+                {event.name}
+              </h4>
+              <p className="mt-2 font-display text-lg text-ink-soft italic sm:text-xl">{event.tagline}</p>
+              <dl className="mt-4 space-y-2.5 text-[0.95rem]">
+                <div className="flex items-start gap-3">
+                  <dt className="mt-1">
+                    <Clock className="size-4 text-gold-deep" aria-hidden="true" />
+                    <span className="sr-only">Time</span>
+                  </dt>
+                  <dd>{timeText(event)}</dd>
+                </div>
+                {event.dressCode && (
+                  <div className="flex items-start gap-3">
+                    <dt className="mt-1">
+                      <Shirt className="size-4 text-gold-deep" aria-hidden="true" />
+                      <span className="sr-only">Dress code</span>
+                    </dt>
+                    <dd className="flex flex-wrap items-center gap-3">
+                      {event.dressCode.label}
+                      <span className="flex -space-x-1" aria-hidden="true">
+                        {event.dressCode.swatches.map((color) => (
+                          <span key={color} className="size-4 rounded-full ring-2 ring-ivory" style={{ background: color }} />
+                        ))}
+                      </span>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+              <p className="mt-4 max-w-xl leading-relaxed text-ink-soft text-pretty">{event.description}</p>
             </div>
-          )}
-        </dl>
+            <CalendarMenu className="btn btn-outline w-full lg:w-auto" menuClassName="left-0 lg:left-auto lg:right-0" entry={calendarEntry(event)} />
+          </div>
+        </div>
+      </div>
+    </li>
+  )
+}
 
-        <p className={`mt-6 max-w-md leading-relaxed text-ink-soft text-pretty ${right ? '' : 'lg:ml-auto'}`} data-reveal data-reveal-delay="0.2">
-          {event.description}
-        </p>
-
-        <div className={`mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap ${right ? '' : 'lg:justify-end'}`} data-reveal data-reveal-delay="0.25">
-          <a href={event.mapsUrl ?? directionsUrl(event.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
+function VenueGroup({ events }: { events: WeddingEvent[] }) {
+  const first = events[0]
+  const start = parseDate(first.start)
+  const oneDay = sameDay(events)
+  return (
+    <li>
+      <article className="relative overflow-hidden border border-gold/35 bg-paper/55 px-4 py-6 sm:px-8 sm:py-9" aria-labelledby={`venue-${first.id}`}>
+        <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-0 right-0 size-16 opacity-80 sm:size-24" />
+        <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 size-16 -scale-100 opacity-80 sm:size-24" />
+        <header className="relative z-[1] flex flex-col gap-6 border-b border-gold/25 pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            {oneDay && start ? (
+              <p className="display text-[clamp(4.25rem,16vw,6.5rem)] leading-[0.8]" style={{ color: first.accent }}>
+                {formatDay(start)}
+                <span className="mt-3 block font-sans text-[0.7rem] font-medium tracking-[0.28em] text-ink-soft uppercase sm:text-[0.75rem] sm:tracking-[0.36em]">
+                  {formatMonth(start)} · {formatWeekday(start)}
+                </span>
+              </p>
+            ) : (
+              <ul className="flex flex-wrap gap-x-8 gap-y-4">
+                {events.map((event) => {
+                  const date = parseDate(event.start)
+                  if (!date) return null
+                  return (
+                    <li key={event.id}>
+                      <p className="display text-[clamp(3.25rem,10vw,4.5rem)] leading-[0.8]" style={{ color: event.accent }}>
+                        {formatDay(date)}
+                      </p>
+                      <p className="mt-2 text-[0.68rem] tracking-[0.22em] text-ink-soft uppercase">
+                        {formatWeekday(date)} · {formatMonth(date)}
+                      </p>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+            <h3 id={`venue-${first.id}`} className="display mt-5 text-[clamp(1.7rem,4vw,2.4rem)] text-ink">
+              {first.venueName}
+            </h3>
+            <p className="mt-2 flex items-start gap-2 text-sm leading-relaxed text-ink-soft text-pretty">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-gold-deep" aria-hidden="true" />
+              {first.address}
+            </p>
+          </div>
+          <a href={first.mapsUrl ?? directionsUrl(first.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
             <Navigation className="size-4" aria-hidden="true" />
             Directions
-            <span className="sr-only">to {event.name} (opens Google Maps)</span>
+            <span className="sr-only"> to {first.venueName} (opens Google Maps)</span>
           </a>
-          {event.end && (
-            <CalendarMenu
-              className="btn btn-outline w-full sm:w-auto"
-              entry={{
-                id: `${event.id}-${partnerOne}-${partnerTwo}`.toLowerCase(),
-                title: `${event.name} · ${partnerOne} & ${partnerTwo}`,
-                start: event.start,
-                end: event.end,
-                location: `${event.space}, ${event.address}`,
-                description: `${event.timeLabel ? `${event.timeLabel}. ` : ''}${event.description}${event.dressCode ? `\nDress code: ${event.dressCode.label}` : ''}`,
-              }}
-            />
-          )}
-        </div>
+        </header>
+        <ul className="relative z-[1] mt-6">
+          {events.map((event) => (
+            <EventRow key={event.id} event={event} showDate={!oneDay} />
+          ))}
+        </ul>
       </article>
     </li>
   )
@@ -126,48 +179,39 @@ function EventItem({ event, index }: { event: WeddingEvent; index: number }) {
 
 export function WeddingEvents() {
   const root = useRef<HTMLElement>(null)
+  const today = useTodayKey()
   useScrollReveal(root)
 
-  // The gold thread draws itself as the guest scrolls through the schedule.
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-      mm.add(MOTION_OK, () => {
-        gsap.fromTo(
-          '[data-thread]',
-          { scaleY: 0 },
-          { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '[data-thread-track]', start: 'top 70%', end: 'bottom 70%', scrub: 0.5 } },
-        )
-      })
-    },
-    { scope: root },
-  )
+  const upcoming = wedding.events.filter((event) => isEventDayCurrent(event.start, new Date(`${today}T12:00:00+05:30`)))
+  const groups: WeddingEvent[][] = []
+  for (const event of upcoming) {
+    const last = groups[groups.length - 1]
+    if (last && last[0].venueName === event.venueName) last.push(event)
+    else groups.push([event])
+  }
 
   return (
-    <section id="events" ref={root} aria-labelledby="events-title" className="paper-grain relative overflow-hidden bg-ivory py-[clamp(5.5rem,13vw,11rem)]">
-      <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-5 right-3 size-14 opacity-75 sm:top-8 sm:right-6 sm:size-24" />
-      <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-5 left-3 size-14 -scale-100 opacity-75 sm:bottom-8 sm:left-6 sm:size-24" />
-      <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
+    <section id="events" ref={root} aria-labelledby="events-title" className="paper-grain relative overflow-hidden bg-ivory pt-[clamp(5.5rem,13vw,11rem)] pb-[max(7.5rem,calc(env(safe-area-inset-bottom)+6rem))]">
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-10">
         <SectionHeading
           id="events-title"
           eyebrow="Three days of celebration"
           title="The Celebrations"
-          lede="Haldi, Mehendi and Sangeet at the farm house, then the reception and Muhurtham at S B Convention Hall."
+          lede="Haldi, Mehendi and Sangeet share Tuesday at the farm house. The reception and the Muhurtham share S B Convention Hall."
         />
         <div className="mt-6 flex justify-center">
           <SampleNote />
         </div>
 
-        <div data-thread-track className="relative mt-20 sm:mt-28">
-          <div aria-hidden="true" className="absolute top-2 bottom-0 left-6 w-px bg-gold/20 sm:left-10 lg:left-1/2">
-            <div data-thread className="size-full origin-top bg-gradient-to-b from-gold via-gold to-gold/0" />
-          </div>
-          <ol className="space-y-24 lg:space-y-36">
-            {wedding.events.map((event, i) => (
-              <EventItem key={event.id} event={event} index={i} />
+        {groups.length > 0 ? (
+          <ol className="mt-14 space-y-8 sm:mt-20 sm:space-y-12">
+            {groups.map((events) => (
+              <VenueGroup key={events[0].venueName} events={events} />
             ))}
           </ol>
-        </div>
+        ) : (
+          <p className="mt-16 text-center font-display text-2xl text-ink-soft italic">These celebrations have passed.</p>
+        )}
       </div>
     </section>
   )
