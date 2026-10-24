@@ -10,6 +10,7 @@ import { WeddingMusic } from './components/audio/WeddingMusic'
 import { InvitationIntro } from './components/invitation/InvitationIntro'
 import { SiteNav } from './components/layout/SiteNav'
 import { SmoothScroll } from './components/providers/SmoothScroll'
+import { AdminLogin } from './components/admin/AdminLogin'
 import { RSVPForm } from './components/rsvp/RSVPForm'
 import { ArchClipDefs } from './components/ui/ornaments'
 import { VenueSection } from './components/venue/VenueSection'
@@ -74,6 +75,9 @@ function Experience() {
 }
 
 export default function App() {
+  const path = typeof window === 'undefined' ? '/' : window.location.pathname.replace(/\/$/, '') || '/'
+  if (path === '/login') return <AdminLogin />
+
   return (
     <WeddingMusic>
       <SmoothScroll>

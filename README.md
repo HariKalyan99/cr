@@ -57,6 +57,12 @@ either way, using `rsvp.whatsappNumber` in `src/data/wedding.ts`.
 Copy `.env.example` to `.env` and fill in the project URL and the anon key. Do not put the
 service role key in `.env`. Supabase injects that key into the edge function.
 
+`/login` is the household view of those replies. Sign-ups are closed. Only an address
+already listed in `public.admin_emails` can request a sign-in link or set up an
+authenticator. Each person opens the link in this browser, then the code from that
+account's authenticator. A login can read the table only after the authenticator is
+accepted.
+
 ## How the motion fits together
 
 - **Lenis and GSAP:** Lenis is driven from `gsap.ticker`, and ScrollTrigger updates on every Lenis

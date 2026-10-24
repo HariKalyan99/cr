@@ -100,7 +100,7 @@ export function CssEnvelope({ phase, onRevealed, reduced }: Props) {
   return (
     <div
       ref={scope}
-      className="relative aspect-[3.2/2.1] w-[min(82vw,34rem,calc(41svh*1.524))] [perspective:1600px]"
+      className={`relative aspect-[3.2/2.1] w-[min(82vw,34rem,calc(41svh*1.524))] ${started ? '[perspective:1600px]' : ''}`}
       aria-hidden="true"
     >
       {/* Back panel (inside of the envelope) */}
@@ -129,15 +129,15 @@ export function CssEnvelope({ phase, onRevealed, reduced }: Props) {
       </div>
 
       {/* Flap: front paper + liner on the reverse, hinged on the top edge */}
-      <div data-flap className="absolute inset-x-0 top-0 z-[4] h-[62%] origin-top [transform-style:preserve-3d]">
-        <div className="absolute inset-0 [backface-visibility:hidden]" style={{ background: FLAP_PAPER, clipPath: 'polygon(0 0, 100% 0, 54% 96%, 50% 100%, 46% 96%)' }}>
+      <div data-flap className={`absolute inset-x-0 top-0 z-[4] h-[62%] origin-top ${started ? '[transform-style:preserve-3d]' : ''}`}>
+        <div className={`absolute inset-0 ${started ? '[backface-visibility:hidden]' : ''}`} style={{ background: FLAP_PAPER, clipPath: 'polygon(0 0, 100% 0, 54% 96%, 50% 100%, 46% 96%)' }}>
           <svg viewBox="0 0 320 130" preserveAspectRatio="none" className="absolute inset-0 size-full" fill="none">
             <path d="M16 3 L160 117 L304 3" stroke="#b8924a" strokeWidth="0.9" vectorEffect="non-scaling-stroke" />
             <path d="M28 3 L160 108 L292 3" stroke="#b8924a" strokeOpacity="0.6" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
           </svg>
         </div>
         <div
-          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateX(180deg)]"
+          className={`absolute inset-0 [transform:rotateX(180deg)] ${started ? '[backface-visibility:hidden]' : 'hidden'}`}
           style={{ background: LINER, clipPath: 'polygon(0 0, 100% 0, 54% 96%, 50% 100%, 46% 96%)' }}
         />
       </div>

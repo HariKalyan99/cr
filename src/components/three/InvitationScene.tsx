@@ -1,6 +1,5 @@
-import { Environment, Lightformer, PerformanceMonitor, Sparkles } from '@react-three/drei'
+import { Environment, Lightformer, Sparkles } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { useState } from 'react'
 import * as THREE from 'three'
 import type { DeviceTier } from '../../lib/device'
 import type { IntroPhase } from '../invitation/types'
@@ -14,10 +13,15 @@ export interface InvitationSceneProps {
   onContextLost: () => void
 }
 
-const QUALITY: Record<DeviceTier, { dpr: [number, number]; sparkles: number; shadowMap: number }> = {
-  high: { dpr: [1, 2], sparkles: 60, shadowMap: 1024 },
-  mobile: { dpr: [1, 1.75], sparkles: 26, shadowMap: 512 },
-  low: { dpr: [1, 1], sparkles: 0, shadowMap: 0 },
+const QUALITY: Record<DeviceTier, { dprCap: number; sparkles: number; shadowMap: number }> = {
+  high: { dprCap: 3, sparkles: 60, shadowMap: 2048 },
+  mobile: { dprCap: 3, sparkles: 26, shadowMap: 1024 },
+  low: { dprCap: 2, sparkles: 0, shadowMap: 0 },
+}
+
+/** Native device pixels, so a 3x iPhone is not upscaling a softer drawing. */
+function scenePixelRatio(cap: number) {
+  return Math.min(window.devicePixelRatio || 1, cap)
 }
 
 /**
@@ -27,26 +31,24 @@ const QUALITY: Record<DeviceTier, { dpr: [number, number]; sparkles: number; sha
  */
 export default function InvitationScene({ phase, tier, onReady, onRevealed, onContextLost }: InvitationSceneProps) {
   const q = QUALITY[tier]
-  const [dprCap, setDprCap] = useState(q.dpr[1])
   const shadows = q.shadowMap > 0
 
   return (
     <Canvas
       aria-hidden="true"
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-      dpr={[q.dpr[0], dprCap]}
+      dpr={scenePixelRatio(q.dprCap)}
       shadows={shadows ? 'percentage' : false}
       camera={{ fov: 30, position: [0, 0, 9], near: 0.1, far: 40 }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: THREE.NeutralToneMapping }}
       onCreated={({ gl }) => {
+        gl.setPixelRatio(scenePixelRatio(q.dprCap))
         gl.domElement.addEventListener('webglcontextlost', (e) => {
           e.preventDefault()
           onContextLost()
         })
       }}
     >
-      {/* Drop resolution if the device struggles to hold a smooth frame rate. */}
-      <PerformanceMonitor onDecline={() => setDprCap(1)} />
 
       <ambientLight intensity={0.5} color="#f4ebe2" />
       <directionalLight
@@ -57,7 +59,7 @@ export default function InvitationScene({ phase, tier, onReady, onRevealed, onCo
         shadow-mapSize={[q.shadowMap || 512, q.shadowMap || 512]}
         shadow-bias={-0.0004}
         shadow-normalBias={0.02}
-        shadow-radius={6}
+        shadow-radius={2}
         shadow-camera-left={-5}
         shadow-camera-right={5}
         shadow-camera-top={4}

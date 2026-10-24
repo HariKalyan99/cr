@@ -39,6 +39,27 @@ function ClosingEnvelope() {
   )
 }
 
+/** Same “Developed by Tronzlabs” credit used on the Tronzlabs sites. */
+function TronzlabsCredit({ className = '' }: { className?: string }) {
+  return (
+    <a
+      href="https://www.tronzlabs.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex min-h-11 max-w-full flex-col items-center justify-center gap-2 text-center text-xs transition-opacity hover:opacity-90 sm:flex-row sm:gap-2 ${className}`}
+      aria-label="With love from Tronzlabs — visit tronzlabs.com"
+    >
+      <span className="text-ivory/55">With love from</span>
+      <span className="font-medium whitespace-nowrap">
+        <span className="text-ivory">Tron</span>
+        <span className="text-red-500 underline underline-offset-2">z</span>
+        <span className="text-ivory/70">labs</span>
+      </span>
+      <img src="/logos/tronzlabs.png" alt="" width={16} height={16} className="studio-logo-glow h-4 w-4 shrink-0 object-contain" />
+    </a>
+  )
+}
+
 export function ClosingScene({ onReplay }: { onReplay: () => void }) {
   const root = useRef<HTMLElement>(null)
   const { scrollTo } = useSmoothScroll()
@@ -129,11 +150,12 @@ export function ClosingScene({ onReplay }: { onReplay: () => void }) {
         </div>
       </div>
 
-      <footer className="relative mt-24 border-t border-gold-soft/15 px-24 pt-8 pb-[max(env(safe-area-inset-bottom),5.5rem)] text-center text-xs text-ivory/50">
+      <footer className="relative mt-24 border-t border-gold-soft/15 px-6 pt-8 pb-[max(env(safe-area-inset-bottom),5.5rem)] text-center text-xs text-ivory/50 sm:px-10">
         <p>
           Made with love for the families of {partnerOne} &amp; {partnerTwo}
         </p>
         {wedding.isSampleContent && <p className="mt-2 italic">Preview — dates, venues and photographs shown are samples and will be updated.</p>}
+        <TronzlabsCredit className="mt-4" />
       </footer>
     </section>
   )

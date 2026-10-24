@@ -17,11 +17,9 @@ export function WaxSeal(props: SVGProps<SVGSVGElement>) {
           <stop offset="50%" stopColor="#c9a256" />
           <stop offset="100%" stopColor="#8f6a2a" />
         </linearGradient>
-        <filter id={`shadow-${id}`} x="-30%" y="-30%" width="160%" height="160%">
-          <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#2a0a12" floodOpacity="0.35" />
-        </filter>
       </defs>
-      <path d={waxPath(54)} fill={`url(#wax-${id})`} filter={`url(#shadow-${id})`} />
+      <ellipse cx="1" cy="5" rx="46" ry="42" fill="#2a0a12" opacity="0.22" />
+      <path d={waxPath(54)} fill={`url(#wax-${id})`} />
       <circle r={42} fill="none" stroke="#2c0a13" strokeOpacity={0.35} strokeWidth={2.4} />
       <circle r={40} fill="none" stroke={`url(#foil-${id})`} strokeWidth={1.15} />
       <circle r={33.5} fill="none" stroke={`url(#foil-${id})`} strokeWidth={0.6} />
