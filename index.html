@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f1e6" />
+    <meta name="color-scheme" content="light" />
+    <!-- %WEDDING_*% tokens are filled from src/data/wedding.ts by the plugin in vite.config.ts -->
+    <title>%WEDDING_TITLE%</title>
+    <meta name="description" content="%WEDDING_DESCRIPTION%" />
+    <meta property="og:title" content="%WEDDING_TITLE%" />
+    <meta property="og:description" content="%WEDDING_DESCRIPTION%" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/hero-mandap-lg.webp" />
+    <link rel="preload" as="image" type="image/webp" href="/images/hero-mandap-sm.webp" />
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 3rem 1.5rem; font-family: Georgia, serif; text-align: center; color: #2a1e1b">
+        <p>%WEDDING_DESCRIPTION%</p>
+        <p>Please enable JavaScript to view the full invitation.</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,280 @@
+@import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+/* Short landscape phones: compress chrome so the invitation still fits. */
+@custom-variant short (@media (max-height: 540px));
+
+@theme {
+  --color-ivory: #faf6ee;
+  --color-paper: #f3ebdd;
+  --color-champagne: #e8d9bc;
+  --color-sand: #d9c6a3;
+  --color-gold: #b8924a;
+  --color-gold-deep: #85652b;
+  --color-gold-soft: #dcc085;
+  --color-burgundy: #5e1a2c;
+  --color-wine: #3d1220;
+  --color-night: #1b0a10;
+  --color-rose: #b07a80;
+  --color-ink: #2a1e1b;
+  --color-ink-soft: #5b4b45;
+
+  --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Jost Variable', 'Jost', ui-sans-serif, system-ui, sans-serif;
+  --font-script: 'Pinyon Script', 'Snell Roundhand', cursive;
+
+  --breakpoint-xs: 25rem;
+}
+
+@layer base {
+  html {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 380;
+    line-height: 1.65;
+    overflow-x: clip;
+    min-height: 100svh;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold-soft) 55%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-deep);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-gold-soft);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Locks page scroll while the intro or lightbox is open. */
+  html.is-locked,
+  html.is-locked body {
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+  }
+
+  .on-dark .eyebrow {
+    color: var(--color-gold-soft);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 7vw, 5.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+  }
+
+  .lede {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--color-ink-soft);
+  }
+
+  .on-dark .lede {
+    color: color-mix(in srgb, var(--color-ivory) 72%, transparent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 2.9rem;
+    padding: 0.7rem 1.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    transition:
+      background-color 0.35s ease,
+      color 0.35s ease,
+      border-color 0.35s ease,
+      transform 0.35s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn-solid {
+    background: var(--color-burgundy);
+    color: var(--color-ivory);
+  }
+
+  .btn-solid:hover {
+    background: var(--color-wine);
+  }
+
+  .btn-outline {
+    border: 1px solid color-mix(in srgb, var(--color-gold-deep) 55%, transparent);
+    color: var(--color-ink);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-gold-deep);
+    background: color-mix(in srgb, var(--color-champagne) 45%, transparent);
+  }
+
+  .on-dark .btn-outline {
+    border-color: color-mix(in srgb, var(--color-gold-soft) 50%, transparent);
+    color: var(--color-ivory);
+  }
+
+  .on-dark .btn-outline:hover {
+    border-color: var(--color-gold-soft);
+    background: color-mix(in srgb, var(--color-gold-soft) 12%, transparent);
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #e6cd92, #b8924a 55%, #9b7835);
+    color: var(--color-night);
+  }
+
+  .btn-gold:hover {
+    filter: brightness(1.06);
+  }
+
+  .text-link {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .text-link:hover,
+  .text-link:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-gold) 70%, transparent), transparent);
+  }
+
+  /* Fine paper fibre texture, generated inline so it costs no network request. */
+  .paper-grain {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .paper-grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .3 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .sample-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-soft);
+    font-style: italic;
+  }
+
+  .on-dark .sample-note {
+    color: color-mix(in srgb, var(--color-ivory) 65%, transparent);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(220%);
+  }
+}
+
+@keyframes seal-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
