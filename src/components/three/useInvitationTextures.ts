@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type * as THREE from 'three'
 import { wedding } from '../../data/wedding'
+import { mediaUrl } from '../../lib/media'
 import { formatLongDate, formatWeekday, parseDate } from '../../lib/dates'
 import type { DeviceTier } from '../../lib/device'
 import {
@@ -31,6 +32,7 @@ const SIZES: Record<DeviceTier, { paper: number; card: number; seal: number; ani
 function loadImage(src: string) {
   return new Promise<HTMLImageElement | null>((resolve) => {
     const img = new Image()
+    img.crossOrigin = 'anonymous'
     img.onload = () => resolve(img)
     img.onerror = () => resolve(null)
     img.src = src
@@ -53,7 +55,7 @@ export function useInvitationTextures(dims: EnvelopeDims, cardAspect: number, ti
     let cancelled = false
     let created: InvitationTextures | null = null
 
-    Promise.all([loadCanvasFonts(), loadImage('/vines/6.svg'), loadImage('/logos/logo.png')]).then(([, floral, logo]) => {
+    Promise.all([loadCanvasFonts(), loadImage(mediaUrl('vines/6.svg')), loadImage(mediaUrl('logos/logo.png'))]).then(([, floral, logo]) => {
       if (cancelled) return
       const s = SIZES[tier]
       const date = parseDate(wedding.weddingDateTime)

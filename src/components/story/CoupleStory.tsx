@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import type { StoryChapter } from '../../data/types'
 import { wedding } from '../../data/wedding'
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
+import { mediaUrl } from '../../lib/media'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { Mandala } from '../ui/ornaments'
@@ -84,7 +85,7 @@ export function CoupleStory() {
   return (
     <section id="story" ref={root} aria-labelledby="story-title" className="paper-grain relative overflow-hidden bg-paper py-[clamp(5.5rem,13vw,11rem)]">
       <div data-story-mandala aria-hidden="true" className="pointer-events-none absolute top-16 -right-[62vw] w-[68vw] opacity-[0.22] lg:top-8 lg:-right-[8vw] lg:w-[min(28rem,32vw)] lg:opacity-[0.28]">
-        <Mandala src="/mandals/3.svg" className="w-full" />
+        <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
       </div>
       <div className="relative z-[1] mx-auto max-w-7xl px-6 sm:px-10">
         <SectionHeading id="story-title" eyebrow="Chapter by chapter" title={story.title} lede={story.intro} />

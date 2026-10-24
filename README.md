@@ -35,18 +35,17 @@ All content lives in **`src/data/wedding.ts`**. Anything marked `SAMPLE` is a pl
 
 The page title and social-preview description in `index.html` are filled from this file at
 build time.
-Before sharing links, change `og:image` in `index.html` to an absolute URL on your domain,
-because social networks ignore relative image paths.
+The social preview image in `index.html` is the hero photo in the Supabase `wedding` bucket.
 
 ### Photos
 
-Each image is a pair of WebP files in `public/images/`:
+Each image is a pair of WebP files in the Supabase `wedding` bucket, under `images/`:
 
 - `name-sm.webp` at about 640 px on its longest side
 - `name-lg.webp` at full size, around 1200–1300 px
 
-Reference it in `wedding.ts` as `src: '/images/name'` with the large file's `width` and `height`,
-and write a meaningful `alt` text.
+Reference it in `wedding.ts` through `img('name', ...)` with the large file's `width` and `height`,
+and write a meaningful `alt` text. The site reads `VITE_SUPABASE_URL` to build those addresses.
 
 ### RSVPs
 

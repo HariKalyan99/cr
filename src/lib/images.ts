@@ -1,4 +1,5 @@
 import type { WeddingImage } from '../data/types'
+import { mediaUrl } from './media'
 
 const SMALL = 640
 
@@ -7,7 +8,7 @@ export function imageSources(image: WeddingImage) {
   const scale = Math.min(1, SMALL / Math.max(image.width, image.height))
   const smallWidth = Math.round(image.width * scale)
   return {
-    src: `${image.src}-lg.webp`,
-    srcSet: `${image.src}-sm.webp ${smallWidth}w, ${image.src}-lg.webp ${image.width}w`,
+    src: mediaUrl(`${image.src}-lg.webp`),
+    srcSet: `${mediaUrl(`${image.src}-sm.webp`)} ${smallWidth}w, ${mediaUrl(`${image.src}-lg.webp`)} ${image.width}w`,
   }
 }

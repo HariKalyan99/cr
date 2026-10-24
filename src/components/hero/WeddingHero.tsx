@@ -3,6 +3,7 @@ import { useRef, type Ref } from 'react'
 import { wedding } from '../../data/wedding'
 import { formatDotted, formatLongDate, formatWeekday, parseDate } from '../../lib/dates'
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
+import { mediaUrl } from '../../lib/media'
 import { easeOut } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
 import { ArchOutline, Mandala, MonogramLogo } from '../ui/ornaments'
@@ -64,7 +65,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
       className="paper-grain relative overflow-hidden bg-ivory pt-[max(env(safe-area-inset-top),4.5rem)] pb-20 sm:pt-20 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-16 lg:pb-24"
     >
       <div data-parallax="mandala" aria-hidden="true" className="pointer-events-none absolute -top-[22vw] -right-[34vw] w-[86vw] opacity-40 lg:-top-[14vw] lg:-right-[16vw] lg:w-[58vw] lg:opacity-55">
-        <Mandala src="/mandals/3.svg" className="w-full" />
+        <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
       </div>
       <div className="relative z-[1] mx-auto grid w-full max-w-7xl gap-14 px-6 sm:px-10 lg:grid-cols-12 lg:items-center lg:gap-8">
         <div data-parallax="text" className="@container lg:col-span-7">
@@ -129,7 +130,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
               animate={revealed ? { opacity: 1, scale: 1 } : undefined}
               transition={{ duration: 1.2, ease: easeOut, delay: 0.9 }}
             >
-              <img src="/vines/3.svg" alt="" draggable={false} className="pointer-events-none absolute top-1/2 left-1/2 w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none" />
+              <img src={mediaUrl('vines/3.svg')} alt="" draggable={false} className="pointer-events-none absolute top-1/2 left-1/2 w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none" />
               <div className="absolute inset-0 rounded-full bg-burgundy shadow-[0_18px_40px_-14px_rgba(61,18,32,0.7)]" />
               <svg data-parallax="badge" viewBox="0 0 100 100" className="absolute inset-0 size-full text-gold-soft">
                 <defs>

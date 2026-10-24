@@ -4,6 +4,7 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { wedding } from '../../data/wedding'
 import { formatDotted, parseDate } from '../../lib/dates'
 import { getDeviceTier, hasWebGL } from '../../lib/device'
+import { mediaUrl } from '../../lib/media'
 import { easeInOut, transition } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
@@ -96,12 +97,12 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
           animate={{ rotate: idle ? 0 : 16 }}
           transition={{ duration: 4, ease: easeInOut }}
         >
-          <Mandala src="/mandals/3.svg" className="w-full" />
+          <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
         </motion.div>
         <div className="absolute inset-3 border border-gold-soft/25 sm:inset-5" />
         <div className="absolute inset-[18px] border border-gold-soft/10 sm:inset-[26px]" />
-        <CornerFloral src="/vines/6.svg" className="absolute top-3 left-3 z-[1] size-16 -scale-x-100 opacity-80 sm:size-24" />
-        <CornerFloral src="/vines/6.svg" className="absolute right-3 bottom-3 z-[1] size-16 -scale-y-100 opacity-80 sm:size-24" />
+        <CornerFloral src={mediaUrl('vines/6.svg')} className="absolute top-3 left-3 z-[1] size-16 -scale-x-100 opacity-80 sm:size-24" />
+        <CornerFloral src={mediaUrl('vines/6.svg')} className="absolute right-3 bottom-3 z-[1] size-16 -scale-y-100 opacity-80 sm:size-24" />
       </div>
 
       {/* 3D invitation */}

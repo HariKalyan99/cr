@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { wedding } from '../../data/wedding'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
+import { mediaUrl } from '../../lib/media'
 import { Mandala } from '../ui/ornaments'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { SectionHeading } from '../ui/SectionHeading'
@@ -65,7 +66,7 @@ export function WeddingGallery() {
       {/* Lower half of the mandala, centred on the top edge so it arches over the heading. */}
       <div aria-hidden="true" className="pointer-events-none absolute top-0 left-1/2 w-[min(128vw,34rem)] -translate-x-1/2 -translate-y-1/2 sm:w-[min(108vw,44rem)] lg:w-[min(88vw,54rem)]">
         <div data-gallery-mandala className="opacity-50">
-          <Mandala src="/mandals/3.svg" className="w-full" />
+          <Mandala src={mediaUrl('mandals/3.svg')} className="w-full" />
         </div>
       </div>
       <div className="relative z-[1] mx-auto max-w-7xl px-4 sm:px-10">
