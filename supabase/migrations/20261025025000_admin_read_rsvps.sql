@@ -5,7 +5,7 @@ create table public.admin_emails (
   email text primary key check (email = lower(email) and position('@' in email) > 1)
 );
 
-insert into public.admin_emails (email) values ('harikalyan91tron@gmail.com');
+-- Household addresses are added in the Supabase dashboard, not in this repository.
 
 alter table public.admin_emails enable row level security;
 

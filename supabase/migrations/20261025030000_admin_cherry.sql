@@ -1,1 +1,1 @@
-insert into public.admin_emails (email) values ('cherrygowda77@gmail.com');
+-- Household addresses are added in the Supabase dashboard, not in this repository.
