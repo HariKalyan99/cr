@@ -141,8 +141,6 @@ export interface WeddingConfig {
     /** WhatsApp number in international format, digits only (e.g. 919876543210). */
     whatsappNumber: string
     whatsappContactName: string
-    /** Public photo WhatsApp shows as the preview on the RSVP message. */
-    previewImage: string
   }
   closing: {
     title: string
