@@ -20,8 +20,15 @@ function weddingMeta(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Site is served from the domain root on Vercel. Public files (/music, /logos, /images) depend on this.
+  base: '/',
   plugins: [react(), tailwindcss(), weddingMeta()],
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    sourcemap: false,
+    target: 'es2022',
     // three.js lives in a lazily loaded chunk that is only fetched for the intro scene.
     chunkSizeWarningLimit: 1200,
   },
