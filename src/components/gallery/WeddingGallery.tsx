@@ -8,6 +8,7 @@ import { Mandala } from '../ui/ornaments'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { SectionHeading } from '../ui/SectionHeading'
 import { Lightbox } from './Lightbox'
+import { WarmWash } from './WarmWash'
 
 /**
  * Editorial, asymmetric placements (mobile 2-col → desktop 12-col). Cycles if
@@ -20,6 +21,7 @@ const LAYOUT = [
   { cls: 'col-span-1 aspect-[4/5] lg:col-span-3 lg:col-start-6 lg:mt-16 lg:aspect-[3/4]', speed: 0.1 },
   { cls: 'col-span-1 aspect-[4/5] lg:col-span-4 lg:col-start-3 lg:mt-6 lg:aspect-[4/3]', speed: -0.04 },
   { cls: 'col-span-2 aspect-[16/10] lg:col-span-4 lg:col-start-9 lg:-mt-24 lg:aspect-[4/3]', speed: 0.08 },
+  { cls: 'col-span-1 aspect-[3/4] lg:col-span-4 lg:col-start-1 lg:mt-10', speed: 0.05 },
 ]
 
 export function WeddingGallery() {
@@ -79,13 +81,14 @@ export function WeddingGallery() {
                     type="button"
                     onClick={() => setActive(i)}
                     aria-label={`View larger: ${image.alt}`}
-                    className="group relative block size-full cursor-zoom-in overflow-hidden text-left"
+                    className="group relative isolate block size-full cursor-zoom-in overflow-hidden text-left"
                   >
                     <ResponsiveImage
                       image={image}
                       sizes="(min-width: 1024px) 45vw, (min-width: 640px) 50vw, 92vw"
                       className="size-full object-cover transition-[scale] duration-[1400ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.05] group-focus-visible:scale-[1.05]"
                     />
+                    {image.warm && <WarmWash />}
                     <span className="absolute inset-0 bg-gradient-to-t from-night/75 via-night/0 to-transparent opacity-90 transition-opacity duration-500 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-visible:opacity-100" />
                     <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-3 sm:p-5 lg:translate-y-2 lg:opacity-0 lg:transition-all lg:duration-500 lg:group-hover:translate-y-0 lg:group-hover:opacity-100 lg:group-focus-visible:translate-y-0 lg:group-focus-visible:opacity-100">
                       <span className="font-display text-base text-ivory italic sm:text-xl">{image.caption}</span>

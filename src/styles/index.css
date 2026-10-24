@@ -99,6 +99,11 @@
     line-height: 0.95;
   }
 
+  /* Sized to the hero column so “Rakshitha H” stays on one line. */
+  .hero-names {
+    font-size: clamp(2.5rem, 16.4cqi, 8.25rem);
+  }
+
   .section-title {
     font-family: var(--font-display);
     font-weight: 400;
@@ -276,6 +281,16 @@
 .mandala-ring {
   -webkit-mask-image: radial-gradient(circle, transparent 0 28%, #000 50%, transparent 76%);
   mask-image: radial-gradient(circle, transparent 0 28%, #000 50%, transparent 76%);
+}
+
+@keyframes mandala-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mandala-spin {
+  animation: mandala-spin 42s linear infinite;
 }
 
 /* A wider clear centre so the invitation sits inside the ring on every screen. */

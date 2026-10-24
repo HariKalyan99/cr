@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useRef } from 'react'
 import { wedding } from '../../data/wedding'
 import { formatLongDate, formatTime, formatWeekday, parseDate } from '../../lib/dates'
-import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { easeOut } from '../../lib/motion'
 import { useCountdown } from '../../hooks/useCountdown'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
@@ -43,28 +42,16 @@ export function WeddingCountdown() {
   const { partnerOne, partnerTwo } = wedding.couple
   useScrollReveal(root)
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-      mm.add(MOTION_OK, () => {
-        gsap.fromTo(
-          '[data-mandala]',
-          { rotate: -12 },
-          { rotate: 12, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom top', scrub: 0.8 } },
-        )
-      })
-    },
-    { scope: root },
-  )
-
   const counting = state.status === 'counting' || state.status === 'pending'
   const v = state.status === 'counting' ? state : null
 
   return (
     <section id="countdown" ref={root} aria-labelledby="countdown-title" className="on-dark relative overflow-hidden bg-wine py-[clamp(5.5rem,12vw,10rem)] text-ivory">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(140,40,64,0.55),transparent_75%)]" />
-      <div data-mandala aria-hidden="true" className="mandala-ring pointer-events-none absolute top-1/2 left-1/2 w-[min(78vw,28rem)] -translate-x-1/2 -translate-y-1/2 opacity-30">
-        <Mandala src="/mandals/3.svg" className="w-full" />
+      <div aria-hidden="true" className="mandala-ring pointer-events-none absolute top-1/2 left-1/2 w-[min(78vw,28rem)] -translate-x-1/2 -translate-y-1/2 opacity-30">
+        <div className="mandala-spin">
+          <Mandala src="/mandals/3.svg" className="w-full" />
+        </div>
       </div>
       <div className="relative z-[1] mx-auto max-w-5xl px-5 text-center">
         <p className="eyebrow" data-reveal>

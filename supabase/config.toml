@@ -1,0 +1,6 @@
+project_id = "charan-and-rakshitha"
+
+# The browser sends the public anon key. The function then writes with the
+# service role, so guests cannot insert into the table directly.
+[functions.rsvp]
+verify_jwt = true

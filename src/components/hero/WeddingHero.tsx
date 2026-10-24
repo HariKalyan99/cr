@@ -67,7 +67,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
         <Mandala src="/mandals/3.svg" className="w-full" />
       </div>
       <div className="relative z-[1] mx-auto grid w-full max-w-7xl gap-14 px-6 sm:px-10 lg:grid-cols-12 lg:items-center lg:gap-8">
-        <div data-parallax="text" className="lg:col-span-7">
+        <div data-parallax="text" className="@container lg:col-span-7">
           <motion.div variants={container} initial="hidden" animate={state}>
             <motion.p variants={item} className="eyebrow">
               {wedding.hero.eyebrow}
@@ -76,12 +76,12 @@ export function WeddingHero({ revealed, headingRef }: Props) {
               id="hero-title"
               ref={headingRef}
               tabIndex={-1}
-              className="display mt-6 text-[clamp(3.4rem,14vw,8.25rem)] text-ink [overflow-wrap:anywhere] outline-none"
+              className="display hero-names mt-6 text-ink outline-none"
             >
-              <motion.span variants={line} className="block">
+              <motion.span variants={line} className="block whitespace-nowrap">
                 {partnerOne}
               </motion.span>
-              <motion.span variants={line} className="block">
+              <motion.span variants={line} className="block whitespace-nowrap">
                 <span className="font-light text-[0.8em] text-gold italic">&amp;</span> {partnerTwo}
               </motion.span>
             </h1>

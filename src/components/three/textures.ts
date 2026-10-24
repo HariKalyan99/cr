@@ -15,7 +15,6 @@ type Ctx = CanvasRenderingContext2D
 const MASK_PAPER = 'rgb(0, 224, 0)'
 const MASK_GOLD = 'rgb(0, 100, 235)'
 const INK = '#3a2823'
-const INK_SOFT = '#6e5a50'
 
 export const FONTS = {
   display: '"Cormorant Garamond Variable", "Cormorant Garamond", Georgia, serif',
@@ -180,14 +179,21 @@ function drawNames(ctx: Ctx, [one, two]: [string, string], cx: number, y: number
   }
   let x = cx - m.total / 2
   ctx.textAlign = 'left'
+  ctx.lineJoin = 'round'
+  ctx.miterLimit = 2
+  const paint = (text: string, at: number) => {
+    ctx.lineWidth = Math.max(1.25, s * 0.012)
+    ctx.strokeText(text, at, y)
+    ctx.fillText(text, at, y)
+  }
   ctx.font = script(s)
-  ctx.fillText(one, x, y)
+  paint(one, x)
   x += m.a + m.gap
   ctx.font = amp(s)
-  ctx.fillText('&', x, y)
+  paint('&', x)
   x += m.amp + m.gap
   ctx.font = script(s)
-  ctx.fillText(two, x, y)
+  paint(two, x)
 }
 
 export interface PbrTexture {
@@ -195,13 +201,36 @@ export interface PbrTexture {
   pbr: THREE.CanvasTexture
 }
 
-function toTextures(L: Layered, anisotropy: number): PbrTexture {
+function toTextures(L: Layered, anisotropy: number, sharp = false): PbrTexture {
   const map = new THREE.CanvasTexture(L.color.canvas)
   map.colorSpace = THREE.SRGBColorSpace
   map.anisotropy = anisotropy
   const pbr = new THREE.CanvasTexture(L.mask.canvas)
   pbr.anisotropy = anisotropy
+  if (sharp) {
+    for (const texture of [map, pbr]) {
+      texture.generateMipmaps = false
+      texture.minFilter = THREE.LinearFilter
+      texture.magFilter = THREE.LinearFilter
+    }
+  }
   return { map, pbr }
+}
+
+/** Gold type that stays the painted colour, so thin strokes are not washed out by reflections. */
+function printedGold(L: Layered, draw: (ctx: Ctx) => void) {
+  const c = L.color
+  c.save()
+  c.fillStyle = '#7a5724'
+  c.strokeStyle = '#7a5724'
+  draw(c)
+  c.restore()
+  const m = L.mask
+  m.save()
+  m.fillStyle = 'rgb(0, 148, 48)'
+  m.strokeStyle = 'rgb(0, 148, 48)'
+  draw(m)
+  m.restore()
 }
 
 /* ───────────────────────────── Envelope ───────────────────────────── */
@@ -366,6 +395,7 @@ export function cardTexture(
   const w = size
   const h = Math.round(size / aspect)
   const L = layered(w, h, '#fbf6ec')
+  L.color.imageSmoothingQuality = 'high'
   paper(L, 'rgba(150, 115, 60, 0.14)')
   const cx = w / 2
 
@@ -407,19 +437,19 @@ export function cardTexture(
     L.color.drawImage(logo, cx - s / 2, my - s / 2, s, s)
   }
 
-  ink(L, INK_SOFT, (ctx) => {
+  ink(L, INK, (ctx) => {
     ctx.textBaseline = 'alphabetic'
     ctx.font = `500 ${w * 0.0155}px ${FONTS.sans}`
     spacedText(ctx, content.preface.toUpperCase(), cx, h * 0.335, w * 0.0065)
   })
 
-  foil(L, (ctx) => {
+  printedGold(L, (ctx) => {
     ctx.textBaseline = 'alphabetic'
     drawNames(ctx, content.names, cx, h * 0.53, w * 0.082, w * 0.78)
   })
 
   ink(L, INK, (ctx) => {
-    ctx.font = `italic 400 ${w * 0.028}px ${FONTS.display}`
+    ctx.font = `italic 500 ${w * 0.028}px ${FONTS.display}`
     ctx.textAlign = 'center'
     const lines = wrap(ctx, content.request, w * 0.6)
     lines.forEach((line, i) => ctx.fillText(line, cx, h * 0.635 + i * w * 0.034))
@@ -447,12 +477,12 @@ export function cardTexture(
     ctx.font = `500 ${w * 0.017}px ${FONTS.sans}`
     spacedText(ctx, content.dateLine.toUpperCase(), cx, h * 0.84, w * 0.005)
   })
-  ink(L, INK_SOFT, (ctx) => {
-    ctx.font = `400 ${w * 0.0145}px ${FONTS.sans}`
+  ink(L, INK, (ctx) => {
+    ctx.font = `500 ${w * 0.0145}px ${FONTS.sans}`
     spacedText(ctx, content.city.toUpperCase(), cx, h * 0.885, w * 0.007)
   })
 
-  return toTextures(L, aniso)
+  return toTextures(L, aniso, true)
 }
 
 /* ─────────────────────────────── Seal ─────────────────────────────── */
@@ -509,7 +539,7 @@ export function sealTexture(size: number, monogram: [string, string], logo: Canv
   }
 
   if (logo) {
-    const s = u(34)
+    const s = u(46)
     ctx.drawImage(logo, c - s / 2, c - s / 2, s, s)
   } else {
     ctx.font = `500 ${u(24)}px ${FONTS.display}`

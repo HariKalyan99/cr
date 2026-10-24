@@ -50,15 +50,12 @@ and write a meaningful `alt` text.
 
 ### RSVPs
 
-By default nothing is stored, and the form says so plainly: guests are told their reply was
-**not** sent. There are two ways to receive RSVPs, and you can enable either or both:
+Replies are saved by the Supabase `rsvp` function into `public.rsvps`. Until `VITE_SUPABASE_URL`
+and `VITE_SUPABASE_ANON_KEY` are set, the form says nothing was stored. WhatsApp stays available
+either way, using `rsvp.whatsappNumber` in `src/data/wedding.ts`.
 
-- **Online endpoint:** set `rsvp.endpoint` to an `https://` URL that accepts a JSON `POST`, for example a
-  [Formspree](https://formspree.io) form, a Google Apps Script web app, or a serverless function.
-  A guest sees "received" only after the endpoint returns a 2xx response.
-  The adapter lives in `src/lib/rsvp.ts` if you need a different payload.
-- **WhatsApp:** set `rsvp.whatsappNumber` to digits only, including the country code (for example
-  `919876543210`). A "Reply on WhatsApp" button then opens a pre-written message to that number.
+Copy `.env.example` to `.env` and fill in the project URL and the anon key. Do not put the
+service role key in `.env`. Supabase injects that key into the edge function.
 
 ## How the motion fits together
 
