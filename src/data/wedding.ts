@@ -23,34 +23,45 @@ const img = (name: string, width: number, height: number, alt: string, caption?:
   caption,
 })
 
-const VENUE_NAME = 'Palace Grounds' // SAMPLE
-const VENUE_ADDRESS = 'Palace Grounds, Jayamahal Road, Vasanth Nagar, Bengaluru, Karnataka' // SAMPLE
-const VENUE_MAPS_QUERY = 'Palace Grounds, Bengaluru' // SAMPLE
+const HALL = {
+  name: 'S B Convention Hall',
+  address: 'Kannahalli, Kodigehalli Post, Magadi Road, Bengaluru, Karnataka 560112',
+  mapsQuery: 'SB Convention Hall Kannalli, Kannahalli, Kodigehalli Post, Magadi Road, Bengaluru 560112',
+  mapsUrl: 'https://maps.app.goo.gl/rNfqivTySLFcz4WXA',
+}
+
+const FARM = {
+  name: 'M Gundappa Farm House',
+  address: '22, Muktinaga Temple Road, Kengeri Hobli, Maragondanahalli, Bengaluru, Karnataka 560060',
+  mapsQuery: 'M Gundappa Farm House, 22 Muktinaga Temple Road, Maragondanahalli, Kengeri Hobli, Bengaluru 560060',
+  mapsUrl: 'https://maps.app.goo.gl/2K4r1826iZ44qyUT6',
+}
 
 export const wedding: WeddingConfig = {
-  isSampleContent: true,
+  isSampleContent: false,
 
   site: {
-    title: 'Charan & Rakshitha · Wedding Invitation',
-    description: 'Charan & Rakshitha warmly invite you to celebrate their wedding.',
+    title: 'Charan Raj & Rakshitha H · Wedding Invitation',
+    description: 'Charan Raj and Rakshitha H invite you to their wedding celebrations in Bengaluru, 27–30 October 2026.',
   },
 
   couple: {
-    partnerOne: 'Charan',
-    partnerTwo: 'Rakshitha',
+    partnerOne: 'Charan Raj',
+    partnerTwo: 'Rakshitha H',
     monogram: ['C', 'R'],
-    hashtag: '#CharanWedsRakshitha',
+    hashtag: '#CharanRajWedsRakshitha',
   },
 
   timeZone: 'Asia/Kolkata',
   timeZoneLabel: 'IST',
-  weddingDateTime: '2027-02-12T18:30:00+05:30', // SAMPLE
-  city: 'Bengaluru', // SAMPLE
+  /** Muhurtham, the ceremony the countdown leads to. */
+  weddingDateTime: '2026-10-30T07:30:00+05:30',
+  city: 'Bengaluru',
 
   hero: {
-    eyebrow: 'Together with their families',
+    eyebrow: 'Together with our families',
     announcement:
-      'We joyfully invite you to share in the celebration of our wedding — four days of colour, music, blessings and the beginning of our forever.',
+      'We joyfully invite you to our wedding celebrations in Bengaluru — Haldi, Mehendi and Sangeet on 27 October, the reception on 29 October, and the Muhurtham on 30 October.',
     image: img(
       'hero-mandap',
       864,
@@ -60,7 +71,7 @@ export const wedding: WeddingConfig = {
   },
 
   invitationCard: {
-    preface: 'Together with their families',
+    preface: 'Together with our families',
     request: 'request the pleasure of your company at the celebration of their wedding',
   },
 
@@ -113,107 +124,172 @@ export const wedding: WeddingConfig = {
     ],
   },
 
-  // SAMPLE schedule — dates, spaces and dress codes must be confirmed.
   events: [
-    {
-      id: 'mehendi',
-      name: 'Mehendi',
-      tagline: 'Henna, music & laughter',
-      start: '2027-02-10T16:00:00+05:30',
-      end: '2027-02-10T21:00:00+05:30',
-      space: 'Garden Lawn',
-      venueName: VENUE_NAME,
-      address: VENUE_ADDRESS,
-      mapsQuery: VENUE_MAPS_QUERY,
-      dressCode: { label: 'Shades of green', swatches: ['#7c8b5a', '#a7b38a', '#d8dcc0'] },
-      description: 'An afternoon of intricate henna, folk songs and dancing as the celebrations begin.',
-      motif: 'mehendi',
-      accent: '#6f7d4c',
-    },
     {
       id: 'haldi',
       name: 'Haldi',
       tagline: 'Turmeric, blessings & sunshine',
-      start: '2027-02-11T10:00:00+05:30',
-      end: '2027-02-11T13:00:00+05:30',
-      space: 'Courtyard',
-      venueName: VENUE_NAME,
-      address: VENUE_ADDRESS,
-      mapsQuery: VENUE_MAPS_QUERY,
-      dressCode: { label: 'Yellows & florals', swatches: ['#e2a62b', '#f2cf6b', '#f7e7b4'] },
-      description: 'A joyful morning ritual of turmeric and blessings from family and friends. Wear something you don’t mind getting a little golden.',
+      start: '2026-10-27T09:00:00+05:30',
+      timeLabel: '9:00 AM onwards IST',
+      space: 'Farm house',
+      venueName: FARM.name,
+      address: FARM.address,
+      mapsQuery: FARM.mapsQuery,
+      mapsUrl: FARM.mapsUrl,
+      dressCode: { label: 'Yellow', swatches: ['#e2a62b', '#f2cf6b', '#f7e7b4'] },
+      description: 'A morning of turmeric and blessings at M Gundappa Farm House. Wear yellow — something you don’t mind getting a little golden.',
       motif: 'haldi',
       accent: '#b9801c',
     },
     {
-      id: 'wedding',
-      name: 'Wedding',
-      tagline: 'The sacred vows',
-      start: '2027-02-12T18:30:00+05:30',
-      end: '2027-02-12T22:30:00+05:30',
-      space: 'Main Pavilion',
-      venueName: VENUE_NAME,
-      address: VENUE_ADDRESS,
-      mapsQuery: VENUE_MAPS_QUERY,
-      dressCode: { label: 'Traditional · pastels welcome', swatches: ['#8a1c2b', '#d8b26a', '#f1e4cf'] },
-      description: 'Under the mandap, surrounded by those we love, we take our seven steps together. Dinner follows the ceremony.',
-      motif: 'wedding',
-      accent: '#8a1c2b',
+      id: 'mehendi',
+      name: 'Mehendi',
+      tagline: 'Henna, colour & laughter',
+      start: '2026-10-27T14:00:00+05:30',
+      timeLabel: '2:00 PM onwards IST',
+      space: 'Farm house',
+      venueName: FARM.name,
+      address: FARM.address,
+      mapsQuery: FARM.mapsQuery,
+      mapsUrl: FARM.mapsUrl,
+      dressCode: { label: 'Blue, purple & green', swatches: ['#2f4d8a', '#7a4e8a', '#6f7d4c'] },
+      description: 'Henna and colour at the farm house the same afternoon. The invitation asks for blue, purple or green.',
+      motif: 'mehendi',
+      accent: '#3d5a3a',
+    },
+    {
+      id: 'sangeet',
+      name: 'Sangeet',
+      tagline: 'Music & celebration',
+      start: '2026-10-27T00:00:00+05:30',
+      space: 'Farm house',
+      venueName: FARM.name,
+      address: FARM.address,
+      mapsQuery: FARM.mapsQuery,
+      mapsUrl: FARM.mapsUrl,
+      description: 'Music and dance at M Gundappa Farm House on 27 October. A starting time is not printed on the card.',
+      motif: 'sangeet',
+      accent: '#2c4a7a',
     },
     {
       id: 'reception',
       name: 'Reception',
-      tagline: 'An evening of celebration',
-      start: '2027-02-13T19:00:00+05:30',
-      end: '2027-02-13T23:00:00+05:30',
-      space: 'Grand Hall',
-      venueName: VENUE_NAME,
-      address: VENUE_ADDRESS,
-      mapsQuery: VENUE_MAPS_QUERY,
-      dressCode: { label: 'Black tie · Indian formal', swatches: ['#1f1b2e', '#5e1a2c', '#c9a45c'] },
-      description: 'Dinner, toasts and dancing late into the night as we celebrate as newlyweds.',
+      tagline: 'An evening together',
+      start: '2026-10-29T18:30:00+05:30',
+      timeLabel: '6:30 PM onwards IST',
+      space: 'Convention hall',
+      venueName: HALL.name,
+      address: HALL.address,
+      mapsQuery: HALL.mapsQuery,
+      mapsUrl: HALL.mapsUrl,
+      description: 'We receive you from 6:30 in the evening at S B Convention Hall, Kannahalli.',
       motif: 'reception',
-      accent: '#3a3456',
+      accent: '#5e1a2c',
+    },
+    {
+      id: 'muhurtham',
+      name: 'Muhurtham',
+      tagline: 'The wedding ceremony',
+      start: '2026-10-30T07:30:00+05:30',
+      end: '2026-10-30T09:00:00+05:30',
+      space: 'Convention hall',
+      venueName: HALL.name,
+      address: HALL.address,
+      mapsQuery: HALL.mapsQuery,
+      mapsUrl: HALL.mapsUrl,
+      description: 'The wedding ceremony at S B Convention Hall, from 7:30 to 9:00 in the morning.',
+      motif: 'wedding',
+      accent: '#8a1c2b',
     },
   ],
 
-  // SAMPLE venue — a real, publicly listed venue used only as a stand-in so the
-  // directions links work. Replace with the confirmed venue.
-  venue: {
-    name: VENUE_NAME,
-    address: VENUE_ADDRESS,
-    mapsQuery: VENUE_MAPS_QUERY,
-    description: 'All four celebrations take place across the grounds, so you can settle in once and enjoy every moment.',
-    travel: [
-      {
-        id: 'airport',
-        kind: 'airport',
-        title: 'Nearest airport',
-        detail: 'Kempegowda International Airport (BLR)',
-        note: 'Roughly 35 km · about an hour by car, depending on traffic',
-      },
-      {
-        id: 'rail',
-        kind: 'rail',
-        title: 'Railway station',
-        detail: 'KSR Bengaluru City Junction',
-        note: 'Roughly 6 km · 20–30 minutes by car',
-      },
-      {
-        id: 'road',
-        kind: 'road',
-        title: 'Getting around',
-        detail: 'App cabs and auto-rickshaws are easy to find across the city',
-        note: 'Allow extra time for evening traffic',
-      },
-    ],
-  },
+  venues: [
+    {
+      id: 'hall',
+      when: 'Reception · 29 October · Muhurtham · 30 October',
+      name: HALL.name,
+      address: HALL.address,
+      mapsQuery: HALL.mapsQuery,
+      mapsUrl: HALL.mapsUrl,
+      description: 'The reception and the Muhurtham are both held at this hall on Magadi Road. Guest rooms are available on the property.',
+      travel: [
+        {
+          id: 'hall-rail',
+          kind: 'rail',
+          title: 'Nearest railway',
+          detail: 'Kengeri Railway Station',
+          note: 'About 6 km away',
+        },
+        {
+          id: 'hall-metro',
+          kind: 'metro',
+          title: 'Nearest metro',
+          detail: 'Kengeri, Purple Line',
+          note: 'About 7 km away',
+        },
+        {
+          id: 'hall-air',
+          kind: 'airport',
+          title: 'Airport',
+          detail: 'Kempegowda International Airport (BLR)',
+          note: 'About 37 km away · allow extra time by road',
+        },
+        {
+          id: 'hall-farm',
+          kind: 'road',
+          title: 'The other venue',
+          detail: 'M Gundappa Farm House, Maragondanahalli',
+          note: 'About 5 km from this hall · Haldi, Mehendi and Sangeet',
+        },
+      ],
+    },
+    {
+      id: 'farm',
+      when: 'Haldi, Mehendi & Sangeet · 27 October',
+      name: FARM.name,
+      address: FARM.address,
+      mapsQuery: FARM.mapsQuery,
+      mapsUrl: FARM.mapsUrl,
+      description: 'The three celebrations on Tuesday, 27 October, are at this farm house on Muktinaga Temple Road.',
+      queries: '97432 47776 · 98453 59508',
+      travel: [
+        {
+          id: 'farm-tree',
+          kind: 'road',
+          title: 'Nearby landmark',
+          detail: 'Dodda Alada Mara, the Big Banyan Tree',
+          note: 'Ramohalli · about 4 km away',
+        },
+        {
+          id: 'farm-rail',
+          kind: 'rail',
+          title: 'Nearest railway',
+          detail: 'Kengeri Railway Station',
+          note: 'About 6 km away',
+        },
+        {
+          id: 'farm-metro',
+          kind: 'metro',
+          title: 'Nearest metro',
+          detail: 'Kengeri, Purple Line',
+          note: 'About 6 km away',
+        },
+        {
+          id: 'farm-air',
+          kind: 'airport',
+          title: 'Airport',
+          detail: 'Kempegowda International Airport (BLR)',
+          note: 'About 42 km away · allow extra time by road',
+        },
+      ],
+    },
+  ],
 
   rsvp: {
-    respondBy: '2027-01-20', // SAMPLE
+    respondBy: '',
     maxGuests: 6,
-    endpoint: '', // e.g. 'https://formspree.io/f/xxxxxxx' — empty means submissions are NOT saved online
-    whatsappNumber: '', // e.g. '919876543210' — digits only, with country code
+    endpoint: '',
+    whatsappNumber: '918105356529',
     whatsappContactName: 'the family',
   },
 

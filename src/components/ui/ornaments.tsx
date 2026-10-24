@@ -5,6 +5,11 @@ type SvgProps = SVGProps<SVGSVGElement>
 const petal = (len: number, w: number) =>
   `M0 0 C${w} ${-len * 0.35} ${w} ${-len * 0.75} 0 ${-len} C${-w} ${-len * 0.75} ${-w} ${-len * 0.35} 0 0Z`
 
+/** Intertwined C R mark from public/logos. */
+export function MonogramLogo({ className }: { className?: string }) {
+  return <img src="/logos/1.png" alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
+}
+
 /** One of the mandalas in public/mandals. The parent owns any rotation, scale, or scroll motion. */
 export function Mandala({ src, className }: { src: string; className?: string }) {
   return <img src={src} alt="" draggable={false} className={`pointer-events-none aspect-square w-full object-cover object-center select-none ${className ?? ''}`} />
@@ -126,7 +131,7 @@ function Lantern() {
   )
 }
 
-const motifs = { mehendi: Paisley, haldi: Marigold, wedding: Kalash, reception: Lantern }
+const motifs = { mehendi: Paisley, haldi: Marigold, sangeet: Lantern, wedding: Kalash, reception: Lantern }
 
 export function EventMotifIcon({ motif, ...props }: SvgProps & { motif: keyof typeof motifs }) {
   const Motif = motifs[motif]

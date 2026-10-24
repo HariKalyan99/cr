@@ -5,7 +5,7 @@ import { formatDotted, formatLongDate, formatWeekday, parseDate } from '../../li
 import { MOTION_OK, gsap, useGSAP } from '../../lib/gsap'
 import { easeOut } from '../../lib/motion'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
-import { ArchOutline, Mandala } from '../ui/ornaments'
+import { ArchOutline, Mandala, MonogramLogo } from '../ui/ornaments'
 import { ResponsiveImage } from '../ui/ResponsiveImage'
 import { SampleNote } from '../ui/SampleNote'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
@@ -26,7 +26,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
   const reduced = useReducedMotionPref()
   const { scrollTo } = useSmoothScroll()
   const date = parseDate(wedding.weddingDateTime)
-  const { partnerOne, partnerTwo, monogram } = wedding.couple
+  const { partnerOne, partnerTwo } = wedding.couple
 
   useGSAP(
     () => {
@@ -139,11 +139,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
                   <textPath href="#badge-ring">SAVE THE DATE · {date ? formatDotted(date) : 'TBA'} ·</textPath>
                 </text>
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center font-display text-2xl text-ivory italic">
-                {monogram[0]}
-                <span className="mx-0.5 text-lg text-gold-soft">&amp;</span>
-                {monogram[1]}
-              </div>
+              <MonogramLogo className="absolute top-1/2 left-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2" />
             </motion.div>
           </div>
         </div>

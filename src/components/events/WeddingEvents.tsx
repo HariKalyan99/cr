@@ -60,7 +60,13 @@ function EventItem({ event, index }: { event: WeddingEvent; index: number }) {
               <Clock className="size-4 text-gold-deep" aria-hidden="true" />
               <span className="sr-only">Time</span>
             </dt>
-            <dd>{start && end ? `${formatTime(start)} – ${formatTime(end)} ${wedding.timeZoneLabel}` : 'Time to be announced'}</dd>
+            <dd>
+              {event.timeLabel
+                ? event.timeLabel
+                : start && end
+                  ? `${formatTime(start)} – ${formatTime(end)} ${wedding.timeZoneLabel}`
+                  : 'Time to be shared'}
+            </dd>
           </div>
           <div className={`flex items-start gap-3 ${right ? '' : 'lg:flex-row-reverse'}`}>
             <dt className="mt-1">
@@ -94,22 +100,24 @@ function EventItem({ event, index }: { event: WeddingEvent; index: number }) {
         </p>
 
         <div className={`mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap ${right ? '' : 'lg:justify-end'}`} data-reveal data-reveal-delay="0.25">
-          <a href={directionsUrl(event.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
+          <a href={event.mapsUrl ?? directionsUrl(event.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
             <Navigation className="size-4" aria-hidden="true" />
             Directions
             <span className="sr-only">to {event.name} (opens Google Maps)</span>
           </a>
-          <CalendarMenu
-            className="btn btn-outline w-full sm:w-auto"
-            entry={{
-              id: `${event.id}-${partnerOne}-${partnerTwo}`.toLowerCase(),
-              title: `${event.name} · ${partnerOne} & ${partnerTwo}`,
-              start: event.start,
-              end: event.end,
-              location: `${event.space}, ${event.address}`,
-              description: `${event.description}${event.dressCode ? `\nDress code: ${event.dressCode.label}` : ''}`,
-            }}
-          />
+          {event.end && (
+            <CalendarMenu
+              className="btn btn-outline w-full sm:w-auto"
+              entry={{
+                id: `${event.id}-${partnerOne}-${partnerTwo}`.toLowerCase(),
+                title: `${event.name} · ${partnerOne} & ${partnerTwo}`,
+                start: event.start,
+                end: event.end,
+                location: `${event.space}, ${event.address}`,
+                description: `${event.timeLabel ? `${event.timeLabel}. ` : ''}${event.description}${event.dressCode ? `\nDress code: ${event.dressCode.label}` : ''}`,
+              }}
+            />
+          )}
         </div>
       </article>
     </li>
@@ -142,9 +150,9 @@ export function WeddingEvents() {
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <SectionHeading
           id="events-title"
-          eyebrow="Four celebrations, one forever"
+          eyebrow="Three days of celebration"
           title="The Celebrations"
-          lede="From henna to the sacred vows — every gathering is a chapter we hope to share with you."
+          lede="Haldi, Mehendi and Sangeet at the farm house, then the reception and Muhurtham at S B Convention Hall."
         />
         <div className="mt-6 flex justify-center">
           <SampleNote />

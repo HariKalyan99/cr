@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { SoundToggle } from '../audio/WeddingMusic'
 import { wedding } from '../../data/wedding'
+import { MonogramLogo } from '../ui/ornaments'
 import { easeOut, transition } from '../../lib/motion'
 import { useSmoothScroll } from '../providers/smoothScrollContext'
 
@@ -48,8 +49,6 @@ export function SiteNav({ visible }: { visible: boolean }) {
     requestAnimationFrame(() => scrollTo(href, { offset: href === '#top' ? 0 : -24 }))
   }
 
-  const [a, b] = wedding.couple.monogram
-
   return (
     <>
       <motion.header
@@ -60,16 +59,14 @@ export function SiteNav({ visible }: { visible: boolean }) {
         animate={{ y: visible ? 0 : -90, opacity: visible ? 1 : 0 }}
         transition={{ ...transition.base, delay: visible ? 0.6 : 0 }}
       >
-        <nav aria-label="Main" className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-10">
+        <nav aria-label="Main" className="mx-auto flex h-16 max-w-7xl items-center justify-between pl-5 pr-[4.75rem] sm:h-20 sm:pl-10 sm:pr-[5.25rem]">
           <a
             href="#top"
             onClick={(e) => go(e, '#top')}
-            className="flex size-11 items-center justify-center rounded-full border border-gold/50 font-display text-lg text-burgundy italic"
+            className="flex size-11 items-center justify-center"
             aria-label={`${wedding.couple.partnerOne} and ${wedding.couple.partnerTwo} — back to top`}
           >
-            {a}
-            <span className="mx-px text-sm text-gold-deep">&amp;</span>
-            {b}
+            <MonogramLogo className="h-10 w-10" />
           </a>
 
           <ul className="hidden items-center gap-9 md:flex">
@@ -80,11 +77,6 @@ export function SiteNav({ visible }: { visible: boolean }) {
                 </a>
               </li>
             ))}
-            {visible && (
-              <li>
-                <SoundToggle />
-              </li>
-            )}
             <li>
               <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-11 px-5 py-2 text-[0.7rem]">
                 RSVP
@@ -93,7 +85,6 @@ export function SiteNav({ visible }: { visible: boolean }) {
           </ul>
 
           <div className="flex items-center gap-2 md:hidden">
-            {visible && <SoundToggle />}
             <a href="#rsvp" onClick={(e) => go(e, '#rsvp')} className="btn btn-solid min-h-11 px-4 py-2 text-[0.68rem]">
               RSVP
             </a>
@@ -111,6 +102,9 @@ export function SiteNav({ visible }: { visible: boolean }) {
           </div>
         </nav>
       </motion.header>
+      {visible && (
+        <SoundToggle className="fixed z-50 top-[max(env(safe-area-inset-top),0.6rem)] right-[max(env(safe-area-inset-right),0.7rem)] sm:top-[max(env(safe-area-inset-top),1.15rem)] sm:right-[max(env(safe-area-inset-right),1.15rem)]" />
+      )}
 
       <AnimatePresence>
         {open && (

@@ -104,7 +104,7 @@ export function WeddingCountdown() {
               <span className="block sm:inline">{formatWeekday(date)} · {formatLongDate(date)}</span>
               <span className="mt-1 block sm:mt-0 sm:ml-2 sm:inline">{formatTime(date)} {wedding.timeZoneLabel}</span>
             </p>
-            {counting && mainEvent && (
+            {counting && mainEvent?.end && (
               <CalendarMenu
                 label="Save the date"
                 entry={{

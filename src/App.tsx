@@ -6,7 +6,7 @@ import { WeddingCountdown } from './components/countdown/WeddingCountdown'
 import { WeddingEvents } from './components/events/WeddingEvents'
 import { WeddingGallery } from './components/gallery/WeddingGallery'
 import { WeddingHero } from './components/hero/WeddingHero'
-import { SoundToggle, WeddingMusic } from './components/audio/WeddingMusic'
+import { WeddingMusic } from './components/audio/WeddingMusic'
 import { InvitationIntro } from './components/invitation/InvitationIntro'
 import { SiteNav } from './components/layout/SiteNav'
 import { SmoothScroll } from './components/providers/SmoothScroll'
@@ -58,9 +58,6 @@ function Experience() {
     <>
       <ArchClipDefs />
       <AnimatePresence>{introOpen && <InvitationIntro key="intro" onComplete={finishIntro} />}</AnimatePresence>
-      {introOpen && (
-        <SoundToggle className="fixed z-[65] top-[calc(max(env(safe-area-inset-top),0px)+5.5rem)] right-[max(env(safe-area-inset-right),1rem)]" />
-      )}
       <SiteNav visible={!introOpen} />
       <main id="main" inert={introOpen}>
         <WeddingHero revealed={revealed} headingRef={heading} />

@@ -1,11 +1,9 @@
 import { useId, type SVGProps } from 'react'
-import { wedding } from '../../data/wedding'
 import { waxPath } from '../../lib/seal'
 
 /** Burgundy wax seal with gold-foil monogram; the DOM twin of the 3D seal. */
 export function WaxSeal(props: SVGProps<SVGSVGElement>) {
   const id = useId().replace(/:/g, '')
-  const [a, b] = wedding.couple.monogram
   return (
     <svg viewBox="-60 -60 120 120" aria-hidden="true" {...props}>
       <defs>
@@ -22,19 +20,6 @@ export function WaxSeal(props: SVGProps<SVGSVGElement>) {
         <filter id={`shadow-${id}`} x="-30%" y="-30%" width="160%" height="160%">
           <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#2a0a12" floodOpacity="0.35" />
         </filter>
-        <filter id={`stamp-${id}`} x="-30%" y="-40%" width="160%" height="180%">
-          <feOffset dx="0.7" dy="1" in="SourceAlpha" result="off" />
-          <feFlood floodColor="#2a0810" floodOpacity="0.8" result="dark" />
-          <feComposite in="dark" in2="off" operator="in" result="shade" />
-          <feOffset dx="-0.45" dy="-0.6" in="SourceAlpha" result="hi" />
-          <feFlood floodColor="#fff1d4" floodOpacity="0.85" result="light" />
-          <feComposite in="light" in2="hi" operator="in" result="glint" />
-          <feMerge>
-            <feMergeNode in="shade" />
-            <feMergeNode in="glint" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
       <path d={waxPath(54)} fill={`url(#wax-${id})`} filter={`url(#shadow-${id})`} />
       <circle r={42} fill="none" stroke="#2c0a13" strokeOpacity={0.35} strokeWidth={2.4} />
@@ -44,15 +29,7 @@ export function WaxSeal(props: SVGProps<SVGSVGElement>) {
         const t = (i / 28) * Math.PI * 2
         return <circle key={i} cx={Math.cos(t) * 36.7} cy={-Math.sin(t) * 36.7} r={0.7} fill={`url(#foil-${id})`} />
       })}
-      <g filter={`url(#stamp-${id})`} fill={`url(#foil-${id})`} fontFamily="var(--font-display)">
-        <text x={-12} y={6.5} textAnchor="middle" fontSize={24}>
-          {a}
-        </text>
-        <text x={12} y={6.5} textAnchor="middle" fontSize={24}>
-          {b}
-        </text>
-        <path d="M0 -4.4 L2.4 0 L0 4.4 L-2.4 0 Z" />
-      </g>
+      <image href="/logos/1.png" x={-20} y={-20} width={40} height={40} />
       <path d="M-30 -18 A36 36 0 0 1 -6 -34" stroke="#ffffff" strokeOpacity={0.18} strokeWidth={3} fill="none" strokeLinecap="round" />
     </svg>
   )

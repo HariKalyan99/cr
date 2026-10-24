@@ -355,7 +355,14 @@ export interface CardContent {
   city: string
 }
 
-export function cardTexture(size: number, aspect: number, content: CardContent, aniso: number, floral: CanvasImageSource | null = null) {
+export function cardTexture(
+  size: number,
+  aspect: number,
+  content: CardContent,
+  aniso: number,
+  floral: CanvasImageSource | null = null,
+  logo: CanvasImageSource | null = null,
+) {
   const w = size
   const h = Math.round(size / aspect)
   const L = layered(w, h, '#fbf6ec')
@@ -395,35 +402,10 @@ export function cardTexture(size: number, aspect: number, content: CardContent, 
 
   // Monogram roundel.
   const my = h * 0.17
-  foil(L, (ctx) => {
-    ctx.lineWidth = w * 0.0016
-    ctx.beginPath()
-    ctx.arc(cx, my, w * 0.042, 0, Math.PI * 2)
-    ctx.stroke()
-    ctx.lineWidth = w * 0.0007
-    ctx.beginPath()
-    ctx.arc(cx, my, w * 0.037, 0, Math.PI * 2)
-    ctx.stroke()
-    const [one, two] = content.monogram
-    ctx.textBaseline = 'middle'
-    ctx.textAlign = 'left'
-    ctx.font = `italic 500 ${w * 0.03}px ${FONTS.display}`
-    const wa = ctx.measureText(one).width
-    const wb = ctx.measureText(two).width
-    const gap = w * 0.014
-    const x = cx - (wa + gap + wb) / 2
-    ctx.fillText(one, x, my)
-    ctx.fillText(two, x + wa + gap, my)
-    const dx = x + wa + gap / 2
-    const d = w * 0.0045
-    ctx.beginPath()
-    ctx.moveTo(dx, my - d)
-    ctx.lineTo(dx + d * 0.7, my)
-    ctx.lineTo(dx, my + d)
-    ctx.lineTo(dx - d * 0.7, my)
-    ctx.closePath()
-    ctx.fill()
-  })
+  if (logo) {
+    const s = w * 0.15
+    L.color.drawImage(logo, cx - s / 2, my - s / 2, s, s)
+  }
 
   ink(L, INK_SOFT, (ctx) => {
     ctx.textBaseline = 'alphabetic'
@@ -480,7 +462,7 @@ export function cardTexture(size: number, aspect: number, content: CardContent, 
  * and a hairline crack runs through it along the same path the seal splits on.
  * The canvas covers shape coordinates [-radius, radius].
  */
-export function sealTexture(size: number, monogram: [string, string]) {
+export function sealTexture(size: number, monogram: [string, string], logo: CanvasImageSource | null = null) {
   const canvas = document.createElement('canvas')
   canvas.width = canvas.height = size
   const ctx = canvas.getContext('2d')!
@@ -526,18 +508,16 @@ export function sealTexture(size: number, monogram: [string, string]) {
     ctx.fill()
   }
 
-  ctx.font = `500 ${u(24)}px ${FONTS.display}`
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(one, c - u(12), c + u(1.5))
-  ctx.fillText(two, c + u(12), c + u(1.5))
-  ctx.beginPath()
-  ctx.moveTo(c, c - u(4.4))
-  ctx.lineTo(c + u(2.4), c)
-  ctx.lineTo(c, c + u(4.4))
-  ctx.lineTo(c - u(2.4), c)
-  ctx.closePath()
-  ctx.fill()
+  if (logo) {
+    const s = u(34)
+    ctx.drawImage(logo, c - s / 2, c - s / 2, s, s)
+  } else {
+    ctx.font = `500 ${u(24)}px ${FONTS.display}`
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(one, c - u(12), c + u(1.5))
+    ctx.fillText(two, c + u(12), c + u(1.5))
+  }
 
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)'
   ctx.lineWidth = u(3)

@@ -1,12 +1,11 @@
 import { Car, ExternalLink, Hotel, MapPinned, Navigation, Plane, TrainFront, TramFront } from 'lucide-react'
 import { useRef, useState } from 'react'
-import type { TravelInfo } from '../../data/types'
+import type { TravelInfo, VenuePlace } from '../../data/types'
 import { wedding } from '../../data/wedding'
 import { directionsUrl, mapEmbedUrl, mapSearchUrl } from '../../lib/links'
 import { useReducedMotionPref } from '../../hooks/useMediaQuery'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { CornerFloral } from '../ui/ornaments'
-import { SampleNote } from '../ui/SampleNote'
 import { SectionHeading } from '../ui/SectionHeading'
 
 const TRAVEL_ICONS: Record<TravelInfo['kind'], typeof Plane> = {
@@ -67,19 +66,100 @@ function MapIllustration({ name, animate }: { name: string; animate: boolean }) 
       </circle>
       <path d="M300 236 C300 236 278 210 278 194 C278 181 288 172 300 172 C312 172 322 181 322 194 C322 210 300 236 300 236Z" fill="#5e1a2c" />
       <circle cx="300" cy="194" r="7" fill="#e6cd92" />
-      <rect x="226" y="246" width="148" height="30" rx="15" fill="#fbf6ec" stroke="#b8924a" strokeOpacity="0.6" />
-      <text x="300" y="266" textAnchor="middle" fontSize="13" fill="#2a1e1b" fontFamily="var(--font-display)" fontStyle="italic">
+      <rect x={300 - Math.min(130, 18 + name.length * 3.4)} y="246" width={Math.min(260, 36 + name.length * 6.8)} height="30" rx="15" fill="#fbf6ec" stroke="#b8924a" strokeOpacity="0.6" />
+      <text x="300" y="266" textAnchor="middle" fontSize="12" fill="#2a1e1b" fontFamily="var(--font-display)" fontStyle="italic">
         {name}
       </text>
     </svg>
   )
 }
 
+function VenueCard({ place, live, onLoadMap, animate }: { place: VenuePlace; live: boolean; onLoadMap: () => void; animate: boolean }) {
+  return (
+    <article className="grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-16" aria-labelledby={`venue-${place.id}`}>
+      <div className="lg:col-span-7">
+        <div data-reveal="image" className="relative overflow-hidden border border-gold/40 bg-champagne p-2 shadow-[0_30px_60px_-30px_rgba(61,18,32,0.35)]">
+          <div className="relative aspect-[4/3] overflow-hidden">
+            {live ? (
+              <iframe
+                title={`Map showing ${place.name}`}
+                src={mapEmbedUrl(place.mapsQuery)}
+                className="absolute inset-0 size-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            ) : (
+              <MapIllustration name={place.name} animate={animate} />
+            )}
+          </div>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-soft">
+          <span className="italic">{live ? 'Map data © Google' : 'Illustration — not to scale'}</span>
+          {!live && (
+            <button type="button" onClick={onLoadMap} className="text-link inline-flex min-h-11 items-center gap-2 font-medium tracking-[0.18em] text-gold-deep uppercase">
+              <MapPinned className="size-4" aria-hidden="true" />
+              Load interactive map
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="lg:col-span-5">
+        <p className="eyebrow">{place.when}</p>
+        <h3 id={`venue-${place.id}`} className="display mt-3 text-[clamp(2.4rem,6vw,3.75rem)] text-balance text-ink" data-reveal>
+          {place.name}
+        </h3>
+        <address className="mt-4 text-[1.02rem] leading-relaxed text-ink-soft not-italic" data-reveal data-reveal-delay="0.05">
+          {place.address}
+        </address>
+        <p className="lede mt-6" data-reveal data-reveal-delay="0.1">
+          {place.description}
+        </p>
+        {place.queries && (
+          <p className="mt-4 text-sm text-ink-soft" data-reveal data-reveal-delay="0.12">
+            For queries <span className="font-medium text-ink">{place.queries}</span>
+          </p>
+        )}
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" data-reveal data-reveal-delay="0.15">
+          <a href={directionsUrl(place.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-solid w-full sm:w-auto">
+            <Navigation className="size-4" aria-hidden="true" />
+            Get directions
+            <span className="sr-only">to {place.name} (opens Google Maps)</span>
+          </a>
+          <a href={place.mapsUrl ?? mapSearchUrl(place.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline w-full sm:w-auto">
+            <ExternalLink className="size-4" aria-hidden="true" />
+            Open in Maps
+          </a>
+        </div>
+
+        {place.travel.length > 0 && (
+          <ul className="mt-12 divide-y divide-gold/25 border-y border-gold/25">
+            {place.travel.map((t, i) => {
+              const Icon = TRAVEL_ICONS[t.kind]
+              return (
+                <li key={t.id} className="flex gap-5 py-5" data-reveal data-reveal-delay={String(0.05 * i)}>
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold-deep">
+                    <Icon className="size-4" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h4 className="eyebrow">{t.title}</h4>
+                    <p className="mt-1.5 font-display text-xl text-ink">{t.detail}</p>
+                    {t.note && <p className="mt-1 text-sm text-ink-soft">{t.note}</p>}
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+    </article>
+  )
+}
+
 export function VenueSection() {
   const root = useRef<HTMLElement>(null)
-  const [liveMap, setLiveMap] = useState(false)
+  const [liveId, setLiveId] = useState<string | null>(null)
   const reduced = useReducedMotionPref()
-  const { venue } = wedding
   useScrollReveal(root)
 
   return (
@@ -87,79 +167,12 @@ export function VenueSection() {
       <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-5 right-3 size-14 opacity-75 sm:top-8 sm:right-6 sm:size-24" />
       <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-5 left-3 size-14 -scale-100 opacity-75 sm:bottom-8 sm:left-6 sm:size-24" />
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
-        <SectionHeading id="venue-title" eyebrow="Getting there" title="The Venue" />
+        <SectionHeading id="venue-title" eyebrow="Getting there" title="The Venues" lede="Two places, a short drive apart. The farm house hosts the first day, and the convention hall hosts the reception and the wedding." />
 
-        <div className="mt-16 grid gap-12 sm:mt-24 lg:grid-cols-12 lg:items-start lg:gap-16">
-          <div className="lg:col-span-7">
-            <div data-reveal="image" className="relative overflow-hidden border border-gold/40 bg-champagne p-2 shadow-[0_30px_60px_-30px_rgba(61,18,32,0.35)]">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                {liveMap ? (
-                  <iframe
-                    title={`Map showing ${venue.name}`}
-                    src={mapEmbedUrl(venue.mapsQuery)}
-                    className="absolute inset-0 size-full border-0"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                ) : (
-                  <MapIllustration name={venue.name} animate={!reduced} />
-                )}
-              </div>
-            </div>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-soft">
-              <span className="italic">{liveMap ? 'Map data © Google' : 'Illustration — not to scale'}</span>
-              {!liveMap && (
-                <button type="button" onClick={() => setLiveMap(true)} className="text-link inline-flex min-h-11 items-center gap-2 font-medium tracking-[0.18em] text-gold-deep uppercase">
-                  <MapPinned className="size-4" aria-hidden="true" />
-                  Load interactive map
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="lg:col-span-5">
-            <h3 className="display text-[clamp(2.6rem,6vw,4rem)] text-ink" data-reveal>
-              {venue.name}
-            </h3>
-            <address className="mt-4 text-[1.02rem] leading-relaxed text-ink-soft not-italic" data-reveal data-reveal-delay="0.05">
-              {venue.address}
-            </address>
-            <SampleNote className="mt-3" />
-            <p className="lede mt-6" data-reveal data-reveal-delay="0.1">
-              {venue.description}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3" data-reveal data-reveal-delay="0.15">
-              <a href={directionsUrl(venue.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-solid">
-                <Navigation className="size-4" aria-hidden="true" />
-                Get directions
-                <span className="sr-only">(opens Google Maps)</span>
-              </a>
-              <a href={mapSearchUrl(venue.mapsQuery)} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-                <ExternalLink className="size-4" aria-hidden="true" />
-                Open in Maps
-              </a>
-            </div>
-
-            {venue.travel.length > 0 && (
-              <ul className="mt-12 divide-y divide-gold/25 border-y border-gold/25">
-                {venue.travel.map((t, i) => {
-                  const Icon = TRAVEL_ICONS[t.kind]
-                  return (
-                    <li key={t.id} className="flex gap-5 py-5" data-reveal data-reveal-delay={String(0.05 * i)}>
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold-deep">
-                        <Icon className="size-4" aria-hidden="true" />
-                      </span>
-                      <div>
-                        <h4 className="eyebrow">{t.title}</h4>
-                        <p className="mt-1.5 font-display text-xl text-ink">{t.detail}</p>
-                        {t.note && <p className="mt-1 text-sm text-ink-soft">{t.note}</p>}
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </div>
+        <div className="mt-16 space-y-20 sm:mt-24 sm:space-y-28">
+          {wedding.venues.map((place) => (
+            <VenueCard key={place.id} place={place} live={liveId === place.id} onLoadMap={() => setLiveId(place.id)} animate={!reduced} />
+          ))}
         </div>
       </div>
     </section>
