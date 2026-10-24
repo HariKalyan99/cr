@@ -11,7 +11,7 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
 
 function Chapter({ chapter, index }: { chapter: StoryChapter; index: number }) {
   const portrait = chapter.image.height > chapter.image.width
-  const flip = index % 2 === 1
+  const flip = index % 2 === 0
 
   // Landscape photos get the wider column; portraits sit narrower with an offset.
   const imageCols = portrait

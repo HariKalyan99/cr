@@ -86,7 +86,7 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
       style={{
         background: 'radial-gradient(ellipse 85% 70% at 50% 46%, #4f1828 0%, #2b0c17 52%, #14060b 100%)',
       }}
-      exit={{ opacity: 0, scale: reduced ? 1 : 1.04, transition: { duration: reduced ? 0.3 : 1.05, ease: easeInOut } }}
+      exit={{ opacity: 0, transition: { duration: reduced ? 0.3 : 1.05, ease: easeInOut } }}
     >
       {/* Atmosphere: mandala, foil frame, corner florals, warm key light */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -106,7 +106,7 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
 
       {/* 3D invitation */}
       {can3D && (
-        <motion.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: show3D ? 1 : 0 }} transition={{ duration: 0.9 }}>
+        <div className="absolute inset-0">
           <SceneErrorBoundary onError={() => setSceneFailed(true)}>
             <Suspense fallback={null}>
               <InvitationScene
@@ -118,7 +118,16 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
               />
             </Suspense>
           </SceneErrorBoundary>
-        </motion.div>
+          {/* Fade a cover over the canvas. Fading the canvas itself makes iOS draw it soft. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 transition-opacity duration-700"
+            style={{
+              opacity: show3D ? 0 : 1,
+              background: 'radial-gradient(ellipse 85% 70% at 50% 46%, #4f1828 0%, #2b0c17 52%, #14060b 100%)',
+            }}
+          />
+        </div>
       )}
 
       {/* CSS invitation (fallback / reduced motion / while 3D loads) */}
@@ -126,7 +135,7 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
         {!show3D && (
           <motion.div
             key="css-envelope"
-            className="absolute inset-0 flex translate-y-[6svh] items-center justify-center"
+            className="absolute inset-x-0 top-[6svh] bottom-0 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.8, delay: can3D ? 0.6 : 0 } }}
             exit={{ opacity: 0, transition: { duration: 0.6 } }}

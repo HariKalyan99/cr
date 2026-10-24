@@ -23,9 +23,9 @@ export interface InvitationTextures {
 }
 
 const SIZES: Record<DeviceTier, { paper: number; card: number; seal: number; aniso: number }> = {
-  high: { paper: 1536, card: 4096, seal: 512, aniso: 8 },
-  mobile: { paper: 1024, card: 2560, seal: 384, aniso: 4 },
-  low: { paper: 768, card: 2048, seal: 256, aniso: 1 },
+  high: { paper: 2048, card: 4096, seal: 1024, aniso: 8 },
+  mobile: { paper: 2048, card: 3072, seal: 768, aniso: 8 },
+  low: { paper: 1536, card: 2560, seal: 512, aniso: 4 },
 }
 
 function loadImage(src: string) {

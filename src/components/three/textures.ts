@@ -295,7 +295,7 @@ export function pocketTexture(size: number, d: EnvelopeDims, aniso: number) {
     ctx.stroke()
   }, 0.85)
 
-  return toTextures(L, aniso)
+  return toTextures(L, aniso, true)
 }
 
 export function flapTexture(size: number, d: EnvelopeDims, aniso: number) {
@@ -334,7 +334,7 @@ export function flapTexture(size: number, d: EnvelopeDims, aniso: number) {
     ctx.lineTo(c[0], c[1])
     ctx.stroke()
   }, 0.8)
-  return toTextures(L, aniso)
+  return toTextures(L, aniso, true)
 }
 
 /** Burgundy liner with a gold jaali (lattice) pattern; seen inside the envelope. */
@@ -370,7 +370,7 @@ export function linerTexture(size: number, aspect: number, aniso: number) {
     0.55,
   )
   grain(L.color, w, h, 6)
-  return toTextures(L, aniso)
+  return toTextures(L, aniso, true)
 }
 
 /* ─────────────────────────────── Card ─────────────────────────────── */
@@ -581,6 +581,9 @@ export function sealTexture(size: number, monogram: [string, string], logo: Canv
   const map = new THREE.CanvasTexture(canvas)
   map.colorSpace = THREE.SRGBColorSpace
   map.anisotropy = 8
+  map.generateMipmaps = false
+  map.minFilter = THREE.LinearFilter
+  map.magFilter = THREE.LinearFilter
   return map
 }
 

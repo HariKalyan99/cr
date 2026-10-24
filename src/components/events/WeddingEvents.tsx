@@ -126,7 +126,7 @@ function VenueGroup({ events }: { events: WeddingEvent[] }) {
       <article className="relative overflow-hidden border border-gold/35 bg-paper/55 px-4 py-6 sm:px-8 sm:py-9" aria-labelledby={`venue-${first.id}`}>
         <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute top-0 right-0 size-16 opacity-80 sm:size-24" />
         <CornerFloral src="/vines/6.svg" aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 size-16 -scale-100 opacity-80 sm:size-24" />
-        <header className="relative z-[1] flex flex-col gap-6 border-b border-gold/25 pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <header className="relative z-[1] border-b border-gold/25 pb-6">
           <div className="min-w-0">
             {oneDay && start ? (
               <p className="display text-[clamp(4.25rem,16vw,6.5rem)] leading-[0.8]" style={{ color: first.accent }}>
@@ -153,7 +153,16 @@ function VenueGroup({ events }: { events: WeddingEvent[] }) {
                 })}
               </ul>
             )}
-            <h3 id={`venue-${first.id}`} className="display mt-5 text-[clamp(1.7rem,4vw,2.4rem)] text-ink">
+          </div>
+        </header>
+        <ul className="relative z-[1] mt-6">
+          {events.map((event) => (
+            <EventRow key={event.id} event={event} showDate={!oneDay} />
+          ))}
+        </ul>
+        <footer className="relative z-[1] mt-2 flex flex-col gap-4 border-t border-gold/25 pt-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <h3 id={`venue-${first.id}`} className="display text-[clamp(1.7rem,4vw,2.4rem)] text-ink">
               {first.venueName}
             </h3>
             <p className="mt-2 flex items-start gap-2 text-sm leading-relaxed text-ink-soft text-pretty">
@@ -166,12 +175,7 @@ function VenueGroup({ events }: { events: WeddingEvent[] }) {
             Directions
             <span className="sr-only"> to {first.venueName} (opens Google Maps)</span>
           </a>
-        </header>
-        <ul className="relative z-[1] mt-6">
-          {events.map((event) => (
-            <EventRow key={event.id} event={event} showDate={!oneDay} />
-          ))}
-        </ul>
+        </footer>
       </article>
     </li>
   )

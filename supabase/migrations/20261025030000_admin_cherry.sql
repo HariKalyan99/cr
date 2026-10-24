@@ -1,0 +1,1 @@
+-- Household addresses are added in the Supabase dashboard, not in this repository.
