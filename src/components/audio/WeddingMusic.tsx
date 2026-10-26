@@ -6,7 +6,7 @@ const SRC = mediaUrl('music/main_song.mp3')
 /** Silence after the seal tap, before the first note. */
 const START_DELAY_MS = 700
 /** Rise from silence to full volume. */
-const FADE_IN_MS = 1000
+const FADE_IN_MS = 800
 
 type MusicControls = {
   /** True while the track is playing and not muted. */
