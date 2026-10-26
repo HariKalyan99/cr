@@ -8,7 +8,7 @@ const petal = (len: number, w: number) =>
 
 /** Intertwined C R mark from the wedding storage bucket. */
 export function MonogramLogo({ className }: { className?: string }) {
-  return <img src={mediaUrl('logos/logo.png')} alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
+  return <img src={mediaUrl('logos/logo.webp')} alt="" draggable={false} className={`pointer-events-none object-contain select-none ${className ?? ''}`} />
 }
 
 /** One of the mandalas in the wedding storage bucket. The parent owns any rotation, scale, or scroll motion. */

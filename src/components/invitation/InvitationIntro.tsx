@@ -50,7 +50,7 @@ export function InvitationIntro({ onComplete }: { onComplete: () => void }) {
 
   const open = useCallback(() => {
     if (phase !== 'idle') return
-    // Same turn as the seal tap, so the browser allows the music to start at once.
+    // Same turn as the seal tap, so the browser allows playback. The note itself waits, then fades in.
     start()
     setRenderer(show3D ? '3d' : 'css')
     setPhase('opening')
