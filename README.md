@@ -35,17 +35,18 @@ All content lives in **`src/data/wedding.ts`**. Anything marked `SAMPLE` is a pl
 
 The page title and social-preview description in `index.html` are filled from this file at
 build time.
-The social preview image in `index.html` is the hero photo in the Supabase `wedding` bucket.
+The social preview image in `index.html` is the hero photo served from this site.
 
 ### Photos
 
-Each image is a pair of WebP files in the Supabase `wedding` bucket, under `images/`:
+Each image is a pair of WebP files in `public/images/`:
 
 - `name-sm.webp` at about 640 px on its longest side
-- `name-lg.webp` at full size, around 1200–1300 px
+- `name-lg.webp` at full size, around 1200–1600 px
 
 Reference it in `wedding.ts` through `img('name', ...)` with the large file's `width` and `height`,
-and write a meaningful `alt` text. The site reads `VITE_SUPABASE_URL` to build those addresses.
+and write a meaningful `alt` text. Music, the monogram, and the ornaments live under `public/` too.
+Supabase is only used for RSVPs and the household login.
 
 ### RSVPs
 

@@ -55,7 +55,7 @@ export function useInvitationTextures(dims: EnvelopeDims, cardAspect: number, ti
     let cancelled = false
     let created: InvitationTextures | null = null
 
-    Promise.all([loadCanvasFonts(), loadImage(mediaUrl('vines/6.svg')), loadImage(mediaUrl('logos/logo.png'))]).then(([, floral, logo]) => {
+    Promise.all([loadCanvasFonts(), loadImage(mediaUrl('vines/6.svg')), loadImage(mediaUrl('logos/logo.webp'))]).then(([, floral, logo]) => {
       if (cancelled) return
       const s = SIZES[tier]
       const date = parseDate(wedding.weddingDateTime)

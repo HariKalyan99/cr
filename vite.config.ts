@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { wedding } from './src/data/wedding.ts'
 
 const escapeHtml = (value: string) =>
@@ -20,13 +20,11 @@ function weddingMeta(media: string): Plugin {
 }
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  const media = `${(env.VITE_SUPABASE_URL ?? '').trim().replace(/\/$/, '')}/storage/v1/object/public/wedding`
+export default defineConfig(() => {
   return {
     // Site is served from the domain root on Vercel.
     base: '/',
-    plugins: [react(), tailwindcss(), weddingMeta(media)],
+    plugins: [react(), tailwindcss(), weddingMeta('')],
     build: {
       outDir: 'dist',
       assetsDir: 'assets',

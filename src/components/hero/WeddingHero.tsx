@@ -130,7 +130,7 @@ export function WeddingHero({ revealed, headingRef }: Props) {
               animate={revealed ? { opacity: 1, scale: 1 } : undefined}
               transition={{ duration: 1.2, ease: easeOut, delay: 0.9 }}
             >
-              <img src={mediaUrl('vines/3.svg')} alt="" draggable={false} className="pointer-events-none absolute top-1/2 left-1/2 w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none" />
+              <img src={mediaUrl('vines/3.webp')} alt="" draggable={false} className="pointer-events-none absolute top-1/2 left-1/2 w-[175%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none" />
               <div className="absolute inset-0 rounded-full bg-burgundy shadow-[0_18px_40px_-14px_rgba(61,18,32,0.7)]" />
               <svg data-parallax="badge" viewBox="0 0 100 100" className="absolute inset-0 size-full text-gold-soft">
                 <defs>

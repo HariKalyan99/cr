@@ -1,28 +1,15 @@
-import { Loader2, LogOut } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
-import { formatLongDate, formatTime, parseDate } from '../../lib/dates'
-import { formatPhone } from '../../lib/rsvp'
 import { supabase } from '../../lib/supabase'
-
-type Reply = {
-  id: string
-  name: string
-  phone: string
-  attending: boolean
-  guests: number
-  events: string[]
-  message: string
-  submitted_at: string
-}
+import { ReplyBoard, type Reply } from './ReplyBoard'
 
 type Enroll = { qr: string; secret: string }
 
 const field =
   'mt-2 w-full border-0 border-b border-ink/25 bg-transparent px-0 py-3 text-lg text-ink placeholder:text-ink-soft/60 focus:border-gold-deep focus:ring-0 focus:outline-none'
 
-function when(iso: string) {
-  const date = parseDate(iso)
-  return date ? `${formatLongDate(date)} · ${formatTime(date)} IST` : ''
+function replyQuery() {
+  return supabase!.from('rsvps').select('id, name, phone, attending, guests, events, message, submitted_at').order('submitted_at', { ascending: false })
 }
 
 /** Moves a signed-in session to the authenticator step, or to the reply list once the code is accepted. */
@@ -71,10 +58,7 @@ async function enter(alive: () => boolean, apply: {
       apply.error('This login cannot view replies.')
       return
     }
-    const rows = await supabase
-      .from('rsvps')
-      .select('id, name, phone, attending, guests, events, message, submitted_at')
-      .order('submitted_at', { ascending: false })
+    const rows = await replyQuery()
     if (!alive()) return
     if (rows.error) {
       apply.error(rows.error.message)
@@ -122,6 +106,7 @@ export function AdminLogin() {
   const [replies, setReplies] = useState<Reply[] | null>(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const apply = {
@@ -146,12 +131,13 @@ export function AdminLogin() {
     }
     const client = supabase
     let cancel = false
-    const open = async (session: { access_token: string } | null) => {
+    const open = async (session: { access_token: string; user: { email?: string } } | null) => {
       if (cancel) return
       if (!session) {
         setReady(true)
         return
       }
+      if (session.user.email) setEmail(session.user.email)
       if (started.current) return
       started.current = true
       try {
@@ -236,6 +222,16 @@ export function AdminLogin() {
     }
   }
 
+  const refresh = async () => {
+    if (!supabase) return
+    setRefreshing(true)
+    setError('')
+    const rows = await replyQuery()
+    if (rows.error) setError(rows.error.message)
+    else setReplies((rows.data ?? []) as Reply[])
+    setRefreshing(false)
+  }
+
   const signOut = async () => {
     setBusy(true)
     await supabase?.auth.signOut()
@@ -248,12 +244,9 @@ export function AdminLogin() {
     setBusy(false)
   }
 
-  const accepts = replies?.filter((reply) => reply.attending) ?? []
-  const guestTotal = accepts.reduce((sum, reply) => sum + reply.guests, 0)
-
   return (
     <main className="paper-grain min-h-svh bg-ivory text-ink">
-      <div className="mx-auto flex min-h-svh w-full max-w-3xl flex-col px-5 py-10 sm:px-10 sm:py-16">
+      <div className="mx-auto flex min-h-svh w-full max-w-3xl flex-col px-5 pt-10 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-10 sm:py-16">
         <p className="eyebrow">Household</p>
         <h1 className="display mt-3 text-[clamp(3rem,8vw,4.75rem)] text-ink">Replies</h1>
         <p className="lede mt-3 max-w-xl">The replies sent from the invitation, for the two of you.</p>
@@ -372,57 +365,15 @@ export function AdminLogin() {
         )}
 
         {replies && (
-          <section className="mt-12">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <p className="text-sm break-all text-ink-soft">{email.trim()}</p>
-              <button type="button" onClick={signOut} disabled={busy} className="btn btn-outline">
-                <LogOut className="size-4" aria-hidden="true" />
-                Sign out
-              </button>
-            </div>
-            {error && <p className="mt-6 text-sm text-burgundy">{error}</p>}
-            {replies.length > 0 && (
-              <dl className="mt-8 grid grid-cols-3 gap-3 border-y border-gold/35 py-5">
-                <div>
-                  <dt className="eyebrow">Replies</dt>
-                  <dd className="mt-1 font-display text-4xl">{replies.length}</dd>
-                </div>
-                <div>
-                  <dt className="eyebrow">Accepts</dt>
-                  <dd className="mt-1 font-display text-4xl">{accepts.length}</dd>
-                </div>
-                <div>
-                  <dt className="eyebrow">Guests</dt>
-                  <dd className="mt-1 font-display text-4xl">{guestTotal}</dd>
-                </div>
-              </dl>
-            )}
-            {replies.length === 0 ? (
-              <p className="mt-10 font-display text-2xl italic text-ink-soft">No replies yet.</p>
-            ) : (
-              <ul className="mt-8 divide-y divide-gold/30">
-                {replies.map((reply) => (
-                  <li key={reply.id} className="py-6">
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                      <h2 className="font-display text-3xl">{reply.name}</h2>
-                      <p className="text-sm text-ink-soft">{when(reply.submitted_at)}</p>
-                    </div>
-                    <p className="mt-2 text-sm">
-                      <a href={`tel:+91${reply.phone}`} className="tabular-nums text-gold-deep">
-                        {formatPhone(reply.phone)}
-                      </a>
-                      <span className="text-ink-soft">
-                        {' '}
-                        · {reply.attending ? `Accepts · ${reply.guests} ${reply.guests === 1 ? 'guest' : 'guests'}` : 'Declines'}
-                      </span>
-                    </p>
-                    {reply.attending && reply.events.length > 0 && <p className="mt-2 text-sm text-ink-soft">{reply.events.join(' · ')}</p>}
-                    {reply.message && <p className="mt-3 text-sm leading-relaxed">{reply.message}</p>}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+          <ReplyBoard
+            replies={replies}
+            email={email}
+            error={error}
+            busy={busy}
+            refreshing={refreshing}
+            onSignOut={() => void signOut()}
+            onRefresh={() => void refresh()}
+          />
         )}
       </div>
     </main>
