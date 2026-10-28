@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { AlertCircle, Check, CircleCheck, Loader2, MessageCircle, Minus, Plus, TriangleAlert } from 'lucide-react'
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { wedding } from '../../data/wedding'
-import { formatPlainDate, formatShortDate, parseDate } from '../../lib/dates'
+import { formatPlainDate, formatShortDate, isEventDayCurrent, parseDate } from '../../lib/dates'
 import { transition } from '../../lib/motion'
 import { isRsvpEndpointConfigured, normalizePhone, rsvpWhatsappUrl, submitRsvp, type RsvpData, type RsvpResult } from '../../lib/rsvp'
 import { mediaUrl } from '../../lib/media'
@@ -29,13 +29,14 @@ export function RSVPForm() {
   const formId = useId()
   const errorSummary = useRef<HTMLDivElement>(null)
   const { rsvp, events, couple } = wedding
+  const openEvents = events.filter((event) => isEventDayCurrent(event.start))
   useScrollReveal(root)
 
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [attending, setAttending] = useState<RsvpData['attending'] | ''>('')
   const [guests, setGuests] = useState(1)
-  const [chosen, setChosen] = useState<string[]>(() => events.map((e) => e.name))
+  const [chosen, setChosen] = useState<string[]>(() => openEvents.map((e) => e.name))
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState<Errors>({})
   const [submitting, setSubmitting] = useState(false)
@@ -248,7 +249,7 @@ export function RSVPForm() {
                     <fieldset aria-describedby={errors.events ? `${formId}-events-error` : undefined}>
                       <legend className="eyebrow">Celebrations you will attend</legend>
                       <div className="mt-4 flex flex-wrap gap-2.5">
-                        {events.map((ev) => {
+                        {openEvents.map((ev) => {
                           const on = chosen.includes(ev.name)
                           const start = parseDate(ev.start)
                           return (

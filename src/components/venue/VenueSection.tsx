@@ -221,7 +221,7 @@ export function VenueSection() {
       <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute top-5 right-3 size-14 opacity-75 sm:top-8 sm:right-6 sm:size-24" />
       <CornerFloral src={mediaUrl('vines/6.svg')} aria-hidden="true" className="pointer-events-none absolute bottom-5 left-3 size-14 -scale-100 opacity-75 sm:bottom-8 sm:left-6 sm:size-24" />
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
-        <SectionHeading id="venue-title" eyebrow="Getting there" title="The Venues" lede="Two places, a short drive apart. The farm house hosts the first day, and the convention hall hosts the reception and the wedding." />
+        <SectionHeading id="venue-title" eyebrow="Getting there" title="The Venue" lede="The reception and the Muhurtham are at S B Convention Hall on Magadi Road, Kannahalli." />
 
         <div className="mt-16 space-y-20 sm:mt-24 sm:space-y-28">
           {wedding.venues.map((place) => (
