@@ -40,7 +40,7 @@ export const wedding: WeddingConfig = {
 
   site: {
     title: 'Charan Raj & Rakshitha H · Wedding Invitation',
-    description: 'Charan Raj and Rakshitha H invite you to their wedding celebrations in Bengaluru, 27–30 October 2026.',
+    description: 'Charan Raj and Rakshitha H invite you to their wedding celebrations in Bengaluru, 29–30 October 2026.',
   },
 
   couple: {
@@ -59,7 +59,7 @@ export const wedding: WeddingConfig = {
   hero: {
     eyebrow: 'Together with our families',
     announcement:
-      'We joyfully invite you to our wedding celebrations in Bengaluru — Haldi, Mehendi and Sangeet on 27 October, the reception on 29 October, and the Muhurtham on 30 October.',
+      'We joyfully invite you to our wedding celebrations in Bengaluru — the reception on 29 October, and the Muhurtham on 30 October.',
     image: img(
       'hero-mandap',
       864,
@@ -203,50 +203,6 @@ export const wedding: WeddingConfig = {
 
   venues: [
     {
-      id: 'farm',
-      when: 'Haldi, Mehendi & Sangeet · 27 October',
-      celebrations: [{ name: 'Haldi, Mehendi & Sangeet', date: '27 October' }],
-      name: FARM.name,
-      address: FARM.address,
-      mapsQuery: FARM.mapsQuery,
-      mapsUrl: FARM.mapsUrl,
-      description: 'The three celebrations on Tuesday, 27 October, are at this farm house on Muktinaga Temple Road.',
-      contacts: [
-        { name: 'Girija', phone: '9743247776' },
-        { name: 'Hanumantharaju', phone: '9845359508' },
-      ],
-      travel: [
-        {
-          id: 'farm-tree',
-          kind: 'road',
-          title: 'Nearby landmark',
-          detail: 'Dodda Alada Mara, the Big Banyan Tree',
-          note: 'Ramohalli · about 4 km away',
-        },
-        {
-          id: 'farm-rail',
-          kind: 'rail',
-          title: 'Nearest railway',
-          detail: 'Kengeri Railway Station',
-          note: 'About 6 km away',
-        },
-        {
-          id: 'farm-metro',
-          kind: 'metro',
-          title: 'Nearest metro',
-          detail: 'Kengeri, Purple Line',
-          note: 'About 6 km away',
-        },
-        {
-          id: 'farm-air',
-          kind: 'airport',
-          title: 'Airport',
-          detail: 'Kempegowda International Airport (BLR)',
-          note: 'About 42 km away · allow extra time by road',
-        },
-      ],
-    },
-    {
       id: 'hall',
       when: 'Reception · 29 October · Muhurtham · 30 October',
       celebrations: [
@@ -287,13 +243,6 @@ export const wedding: WeddingConfig = {
           title: 'Airport',
           detail: 'Kempegowda International Airport (BLR)',
           note: 'About 37 km away · allow extra time by road',
-        },
-        {
-          id: 'hall-farm',
-          kind: 'road',
-          title: 'The other venue',
-          detail: 'M Gundappa Farm House, Maragondanahalli',
-          note: 'About 5 km from this hall · Haldi, Mehendi and Sangeet',
         },
       ],
     },

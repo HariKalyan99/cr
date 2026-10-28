@@ -202,7 +202,7 @@ export function WeddingEvents() {
           id="events-title"
           eyebrow="Three days of celebration"
           title="The Celebrations"
-          lede="Haldi, Mehendi and Sangeet share Tuesday at the farm house. The reception and the Muhurtham share S B Convention Hall."
+          lede="The reception and the Muhurtham are at S B Convention Hall, Kannahalli."
         />
         <div className="mt-6 flex justify-center">
           <SampleNote />
